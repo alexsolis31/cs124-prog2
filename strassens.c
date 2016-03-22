@@ -50,22 +50,24 @@ int readFile(char* fileName, int dimension){
     while((read = getline(&line, &len, fp)) != -1){
       ch1 = atoi(line);
       holdingArray[counter] = ch1; 
-      printf("%d \n", ch1);
+      printf("A: %d \n", ch1);
       counter++;
     }
 
     // print the holdingArray
     for (int i = 0; i < (2*d*d); i++){
-      printf("%d", holdingArray[i]);
+      printf("B: %d\n", holdingArray[i]);
     }
 
-    printf("\n");
+    printf("HI\n");
 
-    int** matrixA = malloc(sizeof(int*)*d*d);
+    int** matrixA = malloc((sizeof(int))*d*d);
 
     int countvar = 0;
     for (int i = 0; i < d; i++){
       for (int j = 0; j < d; j++){
+      	printf("I: %d\n", i);
+      	printf("J: %d\n", j);
         printf("A: %d\n", matrixA[i][j]);
         // printf("countvar: %d\n", countvar);
         // printf("B: %d\n", holdingArray[countvar]);
