@@ -35,6 +35,7 @@ int readFile(char* fileName, dimension){
 	size_t len = 0;
 	ssize_t read;
 	FILE *fp = fopen(fileName, "r");
+	d = dimension; 
 
 	if( fp == NULL ){
       perror("Error while opening the file.\n");
@@ -43,12 +44,28 @@ int readFile(char* fileName, dimension){
 
     printf("The contents of %s file are :\n", fileName);
 
-    while((read = getline(&line, &len, fp)) != -1){
+
+    int** matrixA = malloc(sizeof(int*) * d);
+    int** matrixB = malloc(sizeof(int*) * d);
+
+    for(int i = 0; i < d; i++){
+    	if(read = getline(&line, &len, fp)) != -1){
+			
+		}
+    }
+
+
+    while((read = getline(&line, &len, fp)) != -1){   	
     	ch1 = atoi(line);
+    	for(int i = 0; i < d; i++){
+    		matrixA[i]
+    	}
+
     	printf("%d \n", ch1);
     }
 
-    int** matrix A
+    
+
 
    	fclose(fp);
 
