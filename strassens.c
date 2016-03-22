@@ -18,6 +18,9 @@ int main(int argc, char **argv){
 	char* fileName = argv[3];
 	char ch;
 	int ch1;
+	char* line = NULL;
+	size_t len = 0;
+	ssize_t read;
 	FILE *fp = fopen(fileName, "r");
 
 	if( fp == NULL ){
@@ -27,11 +30,12 @@ int main(int argc, char **argv){
 
     printf("The contents of %s file are :\n", fileName);
 
-    while( ( ch = fgetc(fp) ) != EOF ){
-      ch1 = atoi(&ch);
-      printf("%d \n",ch1);
- 	}
- 	
+    
+    while((read = getline(&line, &len, fp)) != -1){
+    	ch1 = atoi(line);
+    	printf("%d \n", ch1);
+    }
+
    	fclose(fp);
    	return 0;
  
