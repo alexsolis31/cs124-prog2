@@ -4,7 +4,7 @@
 #include <time.h>
 #include "strassens.h"
 
-int readFile(char* fileName);
+// int readFile(char* fileName);
 
 int main(int argc, char **argv){
 
@@ -26,7 +26,7 @@ int main(int argc, char **argv){
 }
 
 
-int readFile(char* fileName, dimension){
+int readFile(char* fileName, int dimension){
 
 	// reading in data from the inputFile 
 	char ch;
@@ -35,7 +35,7 @@ int readFile(char* fileName, dimension){
 	size_t len = 0;
 	ssize_t read;
 	FILE *fp = fopen(fileName, "r");
-	d = dimension; 
+	int d = dimension; 
 
 	if( fp == NULL ){
       perror("Error while opening the file.\n");
@@ -44,25 +44,35 @@ int readFile(char* fileName, dimension){
 
     printf("The contents of %s file are :\n", fileName);
 
-
     int** matrixA = malloc(sizeof(int*) * d);
     int** matrixB = malloc(sizeof(int*) * d);
 
     for(int i = 0; i < d; i++){
-    	if(read = getline(&line, &len, fp)) != -1){
-			
+    	for (int j = 0; j < d; j++){
+	    	if((read = getline(&line, &len, fp)) != -1){
+				matrixA[i][j] = atoi(line);
+			}
 		}
     }
 
-
-    while((read = getline(&line, &len, fp)) != -1){   	
-    	ch1 = atoi(line);
-    	for(int i = 0; i < d; i++){
-    		matrixA[i]
-    	}
-
-    	printf("%d \n", ch1);
+    for(int i = 0; i < d; i++){
+    	for (int j = 0; j < d; j++){
+	    	if((read = getline(&line, &len, fp)) != -1){
+				matrixB[i][j] = atoi(line);
+			}
+		}
     }
+    return 0;
+
+
+    // while((read = getline(&line, &len, fp)) != -1){   	
+    // 	ch1 = atoi(line);
+    // 	for(int i = 0; i < d; i++){
+    // 		matrixA[i]
+    // 	}
+
+    // 	printf("%d \n", ch1);
+    // }
 
     
 
