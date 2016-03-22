@@ -16,7 +16,10 @@
 // };
 
 int readFile(char* fileName, int dimension);
-
+void printMatrix(int** matrix, int dimension);
+int** allocateUpperLeft();
+int** allocateUpperRight();
+int** allocateUpperLeft();
 // struct element* find(struct element* el);
 // struct element* makeset(int x, struct element* el);
 // struct element* link(struct element* i, struct element* j);

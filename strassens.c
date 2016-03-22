@@ -101,9 +101,18 @@ int readFile(char* fileName, int dimension){
     }
     printf("final matrix B: %d\n", matrixB[d-1][d-1]);
     fclose(fp);
+
+    printMatrix(matrixA, dimension);
     return 0; 
+}
 
-
+void printMatrix(int** matrix, int dimension){
+	for (int i=0; i<dimension; i++){
+		for (int j=0; j<dimension; j++){
+			printf("%d ", matrix[i][j]);
+		}
+		printf("\n");
+	}
 }
 
 
