@@ -4,6 +4,8 @@
 #include <time.h>
 #include "strassens.h"
 
+int readFile(char* fileName);
+
 int main(int argc, char **argv){
 
 	// parse inputs 
@@ -16,6 +18,17 @@ int main(int argc, char **argv){
 	int flag = strtoul(argv[1],NULL, 10);
 	int dimension = strtoul(argv[2], NULL, 10);
 	char* fileName = argv[3];
+	readFile(fileName, dimension);
+
+
+   	return 0;
+ 
+}
+
+
+int readFile(char* fileName, dimension){
+
+	// reading in data from the inputFile 
 	char ch;
 	int ch1;
 	char* line = NULL;
@@ -30,16 +43,18 @@ int main(int argc, char **argv){
 
     printf("The contents of %s file are :\n", fileName);
 
-    
     while((read = getline(&line, &len, fp)) != -1){
     	ch1 = atoi(line);
     	printf("%d \n", ch1);
     }
 
+    int** matrix A
+
    	fclose(fp);
-   	return 0;
- 
 
 
 }
+
+
+
 
