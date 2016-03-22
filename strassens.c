@@ -61,20 +61,25 @@ int readFile(char* fileName, int dimension){
 
     printf("HI\n");
 
-    int** matrixA = malloc((sizeof(int))*d*d);
+    int** matrixA = (int**) malloc(sizeof(int*)*d);
+	for (int i=0; i<d; i++){
+		matrixA[i] = (int*) malloc(sizeof(int)*d);
+	}
 
     int countvar = 0;
     for (int i = 0; i < d; i++){
       for (int j = 0; j < d; j++){
       	printf("I: %d\n", i);
       	printf("J: %d\n", j);
-        printf("A: %d\n", matrixA[i][j]);
+        printf("matrix before: %d\n", matrixA[i][j]);
         // printf("countvar: %d\n", countvar);
         // printf("B: %d\n", holdingArray[countvar]);
-        // matrixA[i][j] = holdingArray[countvar];
+        matrixA[i][j] = holdingArray[countvar];
+        printf("matrix after: %d\n", matrixA[i][j]);
         countvar++;
        }
     }
+    printf("final matrix: %d\n", matrixA[3][3]);
 
     int** matrixB = malloc(sizeof(int*) * d);
    
