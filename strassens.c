@@ -12,9 +12,25 @@ int main(int argc, char **argv){
 		return -1; 
 	}
 
-	unsigned flag = strtoul(argv[1],NULL, 10);
-	unsigned dimension = strtoul(argv[2], NULL, 10);
+	int flag = strtoul(argv[1],NULL, 10);
+	int dimension = strtoul(argv[2], NULL, 10);
+	char* fileName = argv[3];
+	char ch; 
+	FILE *fp = fopen(fileName, "r");
 
+	if( fp == NULL ){
+      perror("Error while opening the file.\n");
+      exit(EXIT_FAILURE);
+   }
+
+    printf("The contents of %s file are :\n", fileName);
+
+    while( ( ch = fgetc(fp) ) != EOF )
+      printf("%c",ch);
+ 
+   	fclose(fp);
+   	return 0;
+ 
 
 
 }
