@@ -21,10 +21,48 @@ int main(int argc, char **argv){
   readFile(fileName, dimension);
 
 
+
+
     return 0;
  
 }
 
+
+ int strassenAlgorithm(int dimension, int** matrixA, int** matrixB, int** matrixC){
+    int d = dimension;
+    
+    // Base Case: when matrix is 1x1 (scalar multiplication)
+    if (d == 1){
+      matrixC[0][0] = matrixA[0][0] * matrixB[0][0];
+      return 0; 
+    }
+
+    else{
+      newDim = d/2; 
+      int **a11, **a12, **a21, **a22; 
+      int **b11, **b12, **b21, **b22; 
+      int **c11, **c12, **c21, **c22; 
+      int **x1, **x2, **x3, **x4, **x5;
+      int **x6, **x7, **x8; 
+
+      a11 = allocate_upper_left(matrixA, d);
+      a12 = allocate_upper_right(matrixA, d);
+      a21 = allocate_lower_left(matrixA, d);
+      a22 = allocate_lower_right(matrixA, d);
+
+      b11 = allocate_upper_left(matrixB, d);
+      b12 = allocate_upper_right(matrixB, d);
+      b21 = allocate_lower_left(matrixB, d);
+      b22 = allocate_lower_right(matrixB, d);
+
+
+
+      // compute A11, B11, ... A22, B22 
+      x1 = strassenAlgorithm() 
+
+
+    }
+ }
 
 int readFile(char* fileName, int dimension){
 
