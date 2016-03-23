@@ -103,8 +103,23 @@
 
 /********************************************************/
 
- int** restich(int** a, int** b, int** c, int** d){
- 
-    
 
+ int** reglue(int** a, int** b, int** c, int** d, int dimension){
+  int h = dimension/2;
+  int** gluedMatrix = (int**)malloc(sizeof(int*)*dimension);
+  for (int i=0; i<dimension; i++){
+    gluedMatrix[i] = (int*) malloc(sizeof(int)*dimension);
+  }
+
+  for (int i=0; i<h; i++){
+    for (int j=0; j<h; j++){
+      gluedMatrix[i][j] = a[i][j];
+      gluedMatrix[i][j+h] = b[i][j];
+      gluedMatrix[i+h][j] = c[i][j];
+      gluedMatrix[i+h][j+h] = d[i][j];
+    }
+  }
+
+  printf("reglued: \n");
+  printMatrix(gluedMatrix, dimension);
  }
