@@ -4,20 +4,42 @@
 #include <time.h>
 #include "strassens.h"
 
-int readFile(char* fileName, int dimension);
 
 int main(int argc, char **argv){
-
+  printf("test5");
   // parse inputs 
   if(argc != 4){
     printf("Command line input should be in the form  ./strassen 0 dimension inputfile" );
     return -1; 
   }
+  printf("test1");
 
   int flag = strtoul(argv[1],NULL, 10);
   int dimension = strtoul(argv[2], NULL, 10);
   char* fileName = argv[3];
   readFile(fileName, dimension);
+
+  printf("test2");
+
+  int** matrix1 =  allocateMatrix(dimension);
+  int** matrix2 =  allocateMatrix(dimension);
+
+  matrix1[0][0] = 1;
+  matrix1[0][1] = 2;
+  matrix1[1][0] = 3;
+  matrix1[1][1] = 4;
+
+  printf("test3");
+
+  matrix2[0][0] = 5;
+  matrix2[0][1] = 6;
+  matrix2[1][0] = 7;
+  matrix2[1][1] = 8;
+
+  printf("test4");
+
+  strassenAlgorithm(dimension, matrix1, matrix2);
+
   return 0;
 }
 
@@ -125,8 +147,10 @@ int** allocateQuadrant(int** matrix, int d, int quadrant){
 
 
 
-int** strassenAlgorithm(int dimension, int** matrixA, int** matrixB ){
+int** strassenAlgorithm(int dimension, int** matrixA, int** matrixB){
     int d = dimension;
+
+    int** matrixC = allocateMatrix(d);
     
     // Base Case: when matrix is 1x1 (scalar multiplication)
     if (d == 1){
@@ -134,13 +158,16 @@ int** strassenAlgorithm(int dimension, int** matrixA, int** matrixB ){
       return matrixC; 
     }
 
+
+
     else{
-      newDim = d/2; 
+      int newDim = d/2; 
+
       int **a00, **a01, **a10, **a11; 
       int **b00, **b01, **b10, **b11; 
       int **c00, **c01, **c10, **c11; 
-      int **x1, **x2, **x3, **x4, **x5;
-      int **x6, **x7, **x8; 
+      int **x0, **x1, **x2, **x3, **x4;
+      int **x5, **x6, **x7; 
 
       // divide matrices into four parts
       a00 = allocateQuadrant(matrixA, d, 0);
@@ -182,12 +209,13 @@ int** strassenAlgorithm(int dimension, int** matrixA, int** matrixB ){
       x6 = strassenAlgorithm(newDim, a10, b01);
       x7 = strassenAlgorithm(newDim, a11, b11);
 
-      c00 = sum(x0, x1);
-      c01 = sum(x2, x3);
-      c10 = sum(x4, x5);
-      c11 = sum(x6, x7)
+      c00 = sumMatrices(x0, x1, newDim);
+      c01 = sumMatrices(x2, x3, newDim);
+      c10 = sumMatrices(x4, x5, newDim);
+      c11 = sumMatrices(x6, x7, newDim);
 
-      matrixA = restich(c00, c01, c10, c11);
+      matrixA = reglue(c00, c01, c10, c11, newDim);
+      printMatrix(matrixA, dimension);
       return matrixA; 
     }
  }
@@ -196,7 +224,7 @@ int** strassenAlgorithm(int dimension, int** matrixA, int** matrixB ){
  int** sumMatrices(int** a, int** b, int dimension){
     int** matrixSum = allocateMatrix(dimension);
 
-    for(int i = 0, i<dimension; i++){
+    for(int i = 0; i < dimension; i++){
       for(int j = 0; j < dimension; j++){
         matrixSum[i][j] = a[i][j] + b[i][j];    
       }
@@ -230,12 +258,26 @@ int** strassenAlgorithm(int dimension, int** matrixA, int** matrixB ){
 
 /********************************************************/
 
- int** restich(int** a, int** b, int** c, int** d){
- 
-    
+int** reglue(int** a, int** b, int** c, int** d, int dimension){
+  int h = dimension/2;
+  int** gluedMatrix = (int**)malloc(sizeof(int*)*dimension);
+  for (int i=0; i<dimension; i++){
+    gluedMatrix[i] = (int*) malloc(sizeof(int)*dimension);
+  }
 
+  for (int i=0; i<h; i++){
+    for (int j=0; j<h; j++){
+      gluedMatrix[i][j] = a[i][j];
+      gluedMatrix[i][j+h] = b[i][j];
+      gluedMatrix[i+h][j] = c[i][j];
+      gluedMatrix[i+h][j+h] = d[i][j];
+    }
+  }
+
+  printf("reglued: \n");
+  printMatrix(gluedMatrix, dimension);
+  return gluedMatrix; 
  }
-
 
 
 
