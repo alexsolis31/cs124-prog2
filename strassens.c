@@ -43,7 +43,6 @@ int main(int argc, char **argv){
   return 0;
 }
 
-
 int readFile(char* fileName, int dimension){
   // reading in data from the inputFile 
   char ch;
@@ -95,7 +94,11 @@ int readFile(char* fileName, int dimension){
     }
     fclose(fp);
     printMatrix(matrixA, dimension);
-    allocateQuadrant(matrixA, dimension, 0);
+    int** aTest = allocateQuadrant(matrixA, dimension, 0);
+    int** bTest = allocateQuadrant(matrixA, dimension, 1);
+    int** cTest = allocateQuadrant(matrixA, dimension, 2);
+    int** dTest = allocateQuadrant(matrixA, dimension, 3);
+    reglue(aTest,bTest,cTest,dTest,dimension);
     return 0; 
 }
 
@@ -144,7 +147,6 @@ int** allocateQuadrant(int** matrix, int d, int quadrant){
 	printMatrix(newQuadrant, h);
 	return newQuadrant;
 }
-
 
 
 int** strassenAlgorithm(int dimension, int** matrixA, int** matrixB){
@@ -273,7 +275,6 @@ int** reglue(int** a, int** b, int** c, int** d, int dimension){
       gluedMatrix[i+h][j+h] = d[i][j];
     }
   }
-
   printf("reglued: \n");
   printMatrix(gluedMatrix, dimension);
   return gluedMatrix; 
