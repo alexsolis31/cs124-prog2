@@ -28,7 +28,7 @@ int main(int argc, char **argv){
 }
 
 
- int strassenAlgorithm(int dimension, int** matrixA, int** matrixB, int** matrixC){
+ int strassenAlgorithm(int dimension, int** matrixA, int** matrixB ){
     int d = dimension;
     
     // Base Case: when matrix is 1x1 (scalar multiplication)
@@ -39,26 +39,46 @@ int main(int argc, char **argv){
 
     else{
       newDim = d/2; 
-      int **a11, **a12, **a21, **a22; 
-      int **b11, **b12, **b21, **b22; 
-      int **c11, **c12, **c21, **c22; 
+      int **a00, **a01, **a10, **a11; 
+      int **b00, **b01, **b10, **b11; 
+      int **c00, **c01, **c10, **c11; 
       int **x1, **x2, **x3, **x4, **x5;
       int **x6, **x7, **x8; 
 
-      a11 = allocate_upper_left(matrixA, d);
-      a12 = allocate_upper_right(matrixA, d);
-      a21 = allocate_lower_left(matrixA, d);
-      a22 = allocate_lower_right(matrixA, d);
+      // divide matrices into four parts
+      a00 = allocateUpperLeft(matrixA, d);
+      a01 = allocateUpperRight(matrixA, d);
+      a10 = allocateLowerLeft(matrixA, d);
+      a11 = allocateLowerRight(matrixA, d);
 
-      b11 = allocate_upper_left(matrixB, d);
-      b12 = allocate_upper_right(matrixB, d);
-      b21 = allocate_lower_left(matrixB, d);
-      b22 = allocate_lower_right(matrixB, d);
+      // free Matrix A
+
+      b00 = allocateUpperLeft(matrixB, d);
+      b01 = allocateUpperRight(matrixB, d);
+      b10 = allocateLowerLeft(matrixB, d);
+      b11 = allocateLowerRight(matrixB, d);
+
+      // free Matrix B
+
+      c00 = allocateMatrix(newDim);
+      c01 = allocateMatrix(newDim);
+      c10 = allocateMatrix(newDim);
+      c11 = allocateMatrix(newDim);
 
 
+      x1 = allocateMatrix(newDim);
+      x2 = allocateMatrix(newDim);
+      x3 = allocateMatrix(newDim);
+      x4 = allocateMatrix(newDim);
+      x5 = allocateMatrix(newDim);
+      x6 = allocateMatrix(newDim);
+      x7 = allocateMatrix(newDim);
+      x8 = allocateMatrix(newDim);
 
       // compute A11, B11, ... A22, B22 
-      x1 = strassenAlgorithm() 
+      x1 = strassenAlgorithm(newDim, a11, b11, c11);
+      x2 = strassenAlgorithm(newDim, ) 
+
 
 
     }
