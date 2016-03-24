@@ -63,7 +63,6 @@ int readFile(char* fileName, int dimension, int** matrixA, int** matrixB){
       holdingArray[counter] = ch1; 
       counter++;
     }
-    printf("HERE %d\n", holdingArray[3]);
 
 	// fill matrix A
     int countvar = 0;
@@ -86,6 +85,9 @@ int readFile(char* fileName, int dimension, int** matrixA, int** matrixB){
     printMatrix(matrixA, dimension);
     printf("Matrix B: \n");
     printMatrix(matrixB, dimension);
+
+    sumMatrices(matrixA, matrixB, dimension);
+    subMatrices(matrixB, matrixA, dimension);
     // int** aTest = allocateQuadrant(matrixA, dimension, 0);
     // int** bTest = allocateQuadrant(matrixA, dimension, 1);
     // int** cTest = allocateQuadrant(matrixA, dimension, 2);
@@ -110,9 +112,7 @@ int** allocateQuadrant(int** matrix, int d, int quadrant){
 	// allocate memory for new quadrant matrix
 	int** newQuadrant = (int**)malloc(sizeof(int*) * h);
 	for (int i=0; i<h; i++){
-		printf("AAAAA %d\n", i);
 		newQuadrant[i] = (int*) malloc(sizeof(int) * h);
-		printf("AAAAB %d\n", newQuadrant[i][0]);
 	}
 
 	// printf("2HERE:%d\n", matrix[3][3]);
@@ -153,21 +153,17 @@ int** strassenAlgorithm(int dimension, int** matrixA, int** matrixB){
       return matrixC; 
     }
 
-
-
     else{
       int newDim = d/2; 
 
       int **a00, **a01, **a10, **a11; 
       int **b00, **b01, **b10, **b11; 
       int **c00, **c01, **c10, **c11; 
-      int **x0, **x1, **x2, **x3, **x4;
-      int **x5, **x6, **x7; 
+      int **P0, **P1, **P2, **P3, **P4;
+      int **P5, **P6, **P7; 
 
       // divide matrices into four parts
-      printf("3HERE %d\n", matrixA[1][1]);
       a00 = allocateQuadrant(matrixA, d, 0);
-      printf("4HERE %d\n", matrixA[0][0]);
       a01 = allocateQuadrant(matrixA, d, 1);
       a10 = allocateQuadrant(matrixA, d, 2);
       a11 = allocateQuadrant(matrixA, d, 3);
@@ -182,37 +178,35 @@ int** strassenAlgorithm(int dimension, int** matrixA, int** matrixB){
       // free Matrix B
 
       c00 = allocateMatrix(newDim);
-      printf("CCCCCCCC\n");
       c01 = allocateMatrix(newDim);
       c10 = allocateMatrix(newDim);
       c11 = allocateMatrix(newDim);
 
 
-      x0 = allocateMatrix(newDim);
-      x1 = allocateMatrix(newDim);
-      x2 = allocateMatrix(newDim);
-      x3 = allocateMatrix(newDim);
-      x4 = allocateMatrix(newDim);
-      x5 = allocateMatrix(newDim);
-      x6 = allocateMatrix(newDim);
-      x7 = allocateMatrix(newDim);
+      P0 = allocateMatrix(newDim);
+      P1 = allocateMatrix(newDim);
+      P2 = allocateMatrix(newDim);
+      P3 = allocateMatrix(newDim);
+      P4 = allocateMatrix(newDim);
+      P5 = allocateMatrix(newDim);
+      P6 = allocateMatrix(newDim);
+      P7 = allocateMatrix(newDim);
 
       // compute A11, B11, ... A22, B22 
-      printf("0111111\n");
-      x0 = strassenAlgorithm(newDim, a11, b11);
-      printf("1111111\n");
-      x1 = strassenAlgorithm(newDim, a01, b10);
-      x2 = strassenAlgorithm(newDim, a00, b01);
-      x3 = strassenAlgorithm(newDim, a01, b11);
-      x4 = strassenAlgorithm(newDim, a10, b00);
-      x5 = strassenAlgorithm(newDim, a11, b10);
-      x6 = strassenAlgorithm(newDim, a10, b01);
-      x7 = strassenAlgorithm(newDim, a11, b11);
+      P0 = strassenAlgorithm(newDim, a00, subMatrices(b01, b11, newDim));
+      P1 = strassenAlgorithm(newDim, sumMatrices(a00, a01, newDim), b11);
+      P2 = strassenAlgorithm(newDim, sumMatrices(a10, a11, newDim), b00);
+      P3 = strassenAlgorithm(newDim, a11, subMatrices(b10, b00, newDim));
+      P4 = strassenAlgorithm(newDim, sumMatrices(a00,a11, newDim), sumMatrices(b00, b11, newDim));
+      P5 = strassenAlgorithm(newDim, subMatrices(a01, a11, newDim), sumMatrices(b10, b11, newDim));
+      P6 = strassenAlgorithm(newDim, subMatrices(a00, a10, newDim), sumMatrices(b00, b01, newDim));
 
-      c00 = sumMatrices(x0, x1, newDim);
-      c01 = sumMatrices(x2, x3, newDim);
-      c10 = sumMatrices(x4, x5, newDim);
-      c11 = sumMatrices(x6, x7, newDim);
+      // printMatrix(x0, newDim);
+
+      c00 = sumMatrices(subMatrices(sumMatrices(P4, P3, newDim), P1, newDim) , P5, newDim);
+      c01 = sumMatrices(P0, P1, newDim);
+      c10 = sumMatrices(P2, P3, newDim);
+      c11 = subMatrices(subMatrices(sumMatrices(P0, P4, newDim), P2, newDim), P6, newDim);
 
       matrixA = reglue(c00, c01, c10, c11, newDim);
       printMatrix(matrixA, dimension);
@@ -220,7 +214,7 @@ int** strassenAlgorithm(int dimension, int** matrixA, int** matrixB){
     }
  }
 /********************************************************/
- // sum two vertices 
+ // sum two matrices 
  int** sumMatrices(int** a, int** b, int dimension){
     int** matrixSum = allocateMatrix(dimension);
 
@@ -229,10 +223,24 @@ int** strassenAlgorithm(int dimension, int** matrixA, int** matrixB){
         matrixSum[i][j] = a[i][j] + b[i][j];    
       }
     }  
+
     return matrixSum; 
  }
 
 /********************************************************/
+ // subtract two matrices 
+ int** subMatrices(int** a, int** b, int dimension){
+    int** matrixSum = allocateMatrix(dimension);
+
+    for(int i = 0; i < dimension; i++){
+      for(int j = 0; j < dimension; j++){
+        matrixSum[i][j] = a[i][j] - b[i][j];    
+      }
+    }  
+    return matrixSum; 
+ }
+/********************************************************/
+
 // allocate matrix 
 
  int** allocateMatrix(int d){
