@@ -8,15 +8,16 @@
 int main(int argc, char **argv){
   printf("test5 \n");
   // parse inputs 
-  if(argc != 5){
-    printf("Command line input should be in the form:  ./strassens 0 dimension inputfile" );
+  if(argc != 4){
+    printf("Command line input should be in the form:  ./strassens 0 dimension inputfile\n" );
     return 1; 
   }
   printf("test1");
 
-  int flag = strtoul(argv[2],NULL, 10);
-  int dimension = strtoul(argv[3], NULL, 10);
-  char* fileName = argv[4];
+  int flag = strtoul(argv[1],NULL, 10);
+  int dimension = strtoul(argv[2], NULL, 10);
+  // printf("ARGV4: %s\n", argv[3]);
+  char* fileName = argv[3];
   readFile(fileName, dimension);
 
   printf("test2");
@@ -58,7 +59,7 @@ int readFile(char* fileName, int dimension){
       exit(EXIT_FAILURE);
    }
 
-    int* holdingArray[(2*d*d) + 1];
+    int holdingArray[(2*d*d) + 1];
     int counter = 0;
 
     while((read = getline(&line, &len, fp)) != -1){
@@ -67,28 +68,31 @@ int readFile(char* fileName, int dimension){
       counter++;
     }
 
+    // allocate matrix A
     int** matrixA = (int**) malloc(sizeof(int*)*d);
 	for (int i=0; i<d; i++){
 		matrixA[i] = (int*) malloc(sizeof(int)*d);
 	}
 
+	// fill matrix A
     int countvar = 0;
     for (int i = 0; i < d; i++){
       for (int j = 0; j < d; j++){
-        matrixA[i][j] = *holdingArray[countvar];
+        matrixA[i][j] = holdingArray[countvar];
         countvar++;
        }
     }
 
-
+    // allocate matrix B
     int** matrixB = (int**)malloc(sizeof(int*) * d);
    	for (int i=0; i<d; i++){
 		matrixB[i] = (int*) malloc(sizeof(int)*d);
 	}
 
+	// fill matrix B
     for (int i = 0; i < d; i++){
       for (int j = 0; j < d; j++){
-        matrixB[i][j] = *holdingArray[countvar];
+        matrixB[i][j] = holdingArray[countvar];
         countvar++;
        }
     }
