@@ -15,7 +15,7 @@
 // 	int rank;
 // };
 
-int readFile(char* fileName, int dimension);
+int readFile(char* fileName, int dimension, int** matrixA, int** matrixB);
 void printMatrix(int** matrix, int dimension);
 int** allocateQuadrant(int** matrix, int d, int quadrant);
 int** strassenAlgorithm(int dimension, int** matrixA, int** matrixB);

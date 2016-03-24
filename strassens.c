@@ -15,35 +15,32 @@ int main(int argc, char **argv){
 
   int flag = strtoul(argv[1],NULL, 10);
   int dimension = strtoul(argv[2], NULL, 10);
+  int d = dimension; 
+
   // printf("ARGV4: %s\n", argv[3]);
+
+  // allocate matrix A
+  int** matrixA = (int**) malloc(sizeof(int*)*d);
+  for (int i=0; i<d; i++){
+    matrixA[i] = (int*) malloc(sizeof(int)*d);
+  }
+
+  // allocate matrix B
+  int** matrixB = (int**)malloc(sizeof(int*) * d);
+  for (int i=0; i<d; i++){
+    matrixB[i] = (int*) malloc(sizeof(int)*d);
+  }
+
+
   char* fileName = argv[3];
-  readFile(fileName, dimension);
+  readFile(fileName, dimension, matrixA, matrixB);
 
-  printf("test2\n");
-
-  int** matrix1 =  allocateMatrix(dimension);
-  int** matrix2 =  allocateMatrix(dimension);
-
-  matrix1[0][0] = 1;
-  matrix1[0][1] = 2;
-  matrix1[1][0] = 3;
-  matrix1[1][1] = 4;
-
-  printf("test3\n");
-
-  matrix2[0][0] = 5;
-  matrix2[0][1] = 6;
-  matrix2[1][0] = 7;
-  matrix2[1][1] = 8;
-
-  printf("test4\n");
-
-  strassenAlgorithm(dimension, matrix1, matrix2);
+  strassenAlgorithm(dimension, matrixA, matrixB);
 
   return 0;
 }
 
-int readFile(char* fileName, int dimension){
+int readFile(char* fileName, int dimension, int** matrixA, int** matrixB){
   // reading in data from the inputFile 
   char ch;
   int ch1;
@@ -68,12 +65,6 @@ int readFile(char* fileName, int dimension){
     }
     printf("HERE %d\n", holdingArray[3]);
 
-    // allocate matrix A
-    int** matrixA = (int**) malloc(sizeof(int*)*d);
-	for (int i=0; i<d; i++){
-		matrixA[i] = (int*) malloc(sizeof(int)*d);
-	}
-
 	// fill matrix A
     int countvar = 0;
     for (int i = 0; i < d; i++){
@@ -82,13 +73,6 @@ int readFile(char* fileName, int dimension){
         countvar++;
        }
     }
-
-
-    // allocate matrix B
-    int** matrixB = (int**)malloc(sizeof(int*) * d);
-   	for (int i=0; i<d; i++){
-		matrixB[i] = (int*) malloc(sizeof(int)*d);
-	}
 
 	// fill matrix B
     for (int i = 0; i < d; i++){
