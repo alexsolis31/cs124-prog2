@@ -6,13 +6,12 @@
 
 
 int main(int argc, char **argv){
-  printf("test5 \n");
   // parse inputs 
   if(argc != 4){
     printf("Command line input should be in the form:  ./strassens 0 dimension inputfile\n" );
     return 1; 
   }
-  printf("test1");
+  printf("test1\n");
 
   int flag = strtoul(argv[1],NULL, 10);
   int dimension = strtoul(argv[2], NULL, 10);
@@ -20,7 +19,7 @@ int main(int argc, char **argv){
   char* fileName = argv[3];
   readFile(fileName, dimension);
 
-  printf("test2");
+  printf("test2\n");
 
   int** matrix1 =  allocateMatrix(dimension);
   int** matrix2 =  allocateMatrix(dimension);
@@ -30,14 +29,14 @@ int main(int argc, char **argv){
   matrix1[1][0] = 3;
   matrix1[1][1] = 4;
 
-  printf("test3");
+  printf("test3\n");
 
   matrix2[0][0] = 5;
   matrix2[0][1] = 6;
   matrix2[1][0] = 7;
   matrix2[1][1] = 8;
 
-  printf("test4");
+  printf("test4\n");
 
   strassenAlgorithm(dimension, matrix1, matrix2);
 
@@ -67,6 +66,7 @@ int readFile(char* fileName, int dimension){
       holdingArray[counter] = ch1; 
       counter++;
     }
+    printf("HERE %d\n", holdingArray[3]);
 
     // allocate matrix A
     int** matrixA = (int**) malloc(sizeof(int*)*d);
@@ -83,6 +83,7 @@ int readFile(char* fileName, int dimension){
        }
     }
 
+
     // allocate matrix B
     int** matrixB = (int**)malloc(sizeof(int*) * d);
    	for (int i=0; i<d; i++){
@@ -97,12 +98,15 @@ int readFile(char* fileName, int dimension){
        }
     }
     fclose(fp);
+    printf("Matrix A: \n");
     printMatrix(matrixA, dimension);
-    int** aTest = allocateQuadrant(matrixA, dimension, 0);
-    int** bTest = allocateQuadrant(matrixA, dimension, 1);
-    int** cTest = allocateQuadrant(matrixA, dimension, 2);
-    int** dTest = allocateQuadrant(matrixA, dimension, 3);
-    reglue(aTest,bTest,cTest,dTest,dimension);
+    printf("Matrix B: \n");
+    printMatrix(matrixB, dimension);
+    // int** aTest = allocateQuadrant(matrixA, dimension, 0);
+    // int** bTest = allocateQuadrant(matrixA, dimension, 1);
+    // int** cTest = allocateQuadrant(matrixA, dimension, 2);
+    // int** dTest = allocateQuadrant(matrixA, dimension, 3);
+    // reglue(aTest,bTest,cTest,dTest,dimension);
     return 0; 
 }
 
@@ -124,24 +128,22 @@ int** allocateQuadrant(int** matrix, int d, int quadrant){
 		newQuadrant[i] = (int*) malloc(sizeof(int) * h);
 	}
 
+	printf("2HERE:%d\n", matrix[3][3]);
+
 	for (int i = 0; i < h; i++){
 			for (int j = 0; j < h; j++){
 				switch(quadrant){
 				case 0: //upper left
 					newQuadrant[i][j] = matrix[i][j];
-					printf("switch 0\n");
 					break;
 				case 1: //upper right
 					newQuadrant[i][j] = matrix[i][j+h];
-					printf("switch 1\n");
 					break;
 				case 2: // bottom left
 					newQuadrant[i][j] = matrix[i+h][j];
-					printf("switch 2\n");
 					break;
 				case 3: // bottom right
 					newQuadrant[i][j] = matrix[i+h][j+h];
-					printf("switch 3\n");
 					break;
 
 			}
@@ -176,53 +178,54 @@ int** strassenAlgorithm(int dimension, int** matrixA, int** matrixB){
       int **x5, **x6, **x7; 
 
       // divide matrices into four parts
+      printf("3HERE %d\n", matrixA[1][1]);
       a00 = allocateQuadrant(matrixA, d, 0);
-      a01 = allocateQuadrant(matrixA, d, 1);
-      a10 = allocateQuadrant(matrixA, d, 2);
-      a11 = allocateQuadrant(matrixA, d, 3);
+      // a01 = allocateQuadrant(matrixA, d, 1);
+      // a10 = allocateQuadrant(matrixA, d, 2);
+      // a11 = allocateQuadrant(matrixA, d, 3);
 
-      // free Matrix A
+      // // free Matrix A
 
-      b00 = allocateQuadrant(matrixB, d, 0);
-      b01 = allocateQuadrant(matrixB, d, 1);
-      b10 = allocateQuadrant(matrixB, d, 2);
-      b11 = allocateQuadrant(matrixB, d, 3);
+      // b00 = allocateQuadrant(matrixB, d, 0);
+      // b01 = allocateQuadrant(matrixB, d, 1);
+      // b10 = allocateQuadrant(matrixB, d, 2);
+      // b11 = allocateQuadrant(matrixB, d, 3);
 
-      // free Matrix B
+      // // free Matrix B
 
-      c00 = allocateMatrix(newDim);
-      c01 = allocateMatrix(newDim);
-      c10 = allocateMatrix(newDim);
-      c11 = allocateMatrix(newDim);
+      // c00 = allocateMatrix(newDim);
+      // c01 = allocateMatrix(newDim);
+      // c10 = allocateMatrix(newDim);
+      // c11 = allocateMatrix(newDim);
 
 
-      x0 = allocateMatrix(newDim);
-      x1 = allocateMatrix(newDim);
-      x2 = allocateMatrix(newDim);
-      x3 = allocateMatrix(newDim);
-      x4 = allocateMatrix(newDim);
-      x5 = allocateMatrix(newDim);
-      x6 = allocateMatrix(newDim);
-      x7 = allocateMatrix(newDim);
+      // x0 = allocateMatrix(newDim);
+      // x1 = allocateMatrix(newDim);
+      // x2 = allocateMatrix(newDim);
+      // x3 = allocateMatrix(newDim);
+      // x4 = allocateMatrix(newDim);
+      // x5 = allocateMatrix(newDim);
+      // x6 = allocateMatrix(newDim);
+      // x7 = allocateMatrix(newDim);
 
-      // compute A11, B11, ... A22, B22 
-      x0 = strassenAlgorithm(newDim, a11, b11);
-      x1 = strassenAlgorithm(newDim, a01, b10);
-      x2 = strassenAlgorithm(newDim, a00, b01);
-      x3 = strassenAlgorithm(newDim, a01, b11);
-      x4 = strassenAlgorithm(newDim, a10, b00);
-      x5 = strassenAlgorithm(newDim, a11, b10);
-      x6 = strassenAlgorithm(newDim, a10, b01);
-      x7 = strassenAlgorithm(newDim, a11, b11);
+      // // compute A11, B11, ... A22, B22 
+      // x0 = strassenAlgorithm(newDim, a11, b11);
+      // x1 = strassenAlgorithm(newDim, a01, b10);
+      // x2 = strassenAlgorithm(newDim, a00, b01);
+      // x3 = strassenAlgorithm(newDim, a01, b11);
+      // x4 = strassenAlgorithm(newDim, a10, b00);
+      // x5 = strassenAlgorithm(newDim, a11, b10);
+      // x6 = strassenAlgorithm(newDim, a10, b01);
+      // x7 = strassenAlgorithm(newDim, a11, b11);
 
-      c00 = sumMatrices(x0, x1, newDim);
-      c01 = sumMatrices(x2, x3, newDim);
-      c10 = sumMatrices(x4, x5, newDim);
-      c11 = sumMatrices(x6, x7, newDim);
+      // c00 = sumMatrices(x0, x1, newDim);
+      // c01 = sumMatrices(x2, x3, newDim);
+      // c10 = sumMatrices(x4, x5, newDim);
+      // c11 = sumMatrices(x6, x7, newDim);
 
-      matrixA = reglue(c00, c01, c10, c11, newDim);
-      printMatrix(matrixA, dimension);
-      return matrixA; 
+      // matrixA = reglue(c00, c01, c10, c11, newDim);
+      // printMatrix(matrixA, dimension);
+      // return matrixA; 
     }
  }
 /********************************************************/
