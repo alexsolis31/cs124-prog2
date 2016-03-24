@@ -6,17 +6,17 @@
 
 
 int main(int argc, char **argv){
-  printf("test5");
+  printf("test5 \n");
   // parse inputs 
-  if(argc != 4){
-    printf("Command line input should be in the form  ./strassen 0 dimension inputfile" );
-    return -1; 
+  if(argc != 5){
+    printf("Command line input should be in the form:  ./strassens 0 dimension inputfile" );
+    return 1; 
   }
   printf("test1");
 
-  int flag = strtoul(argv[1],NULL, 10);
-  int dimension = strtoul(argv[2], NULL, 10);
-  char* fileName = argv[3];
+  int flag = strtoul(argv[2],NULL, 10);
+  int dimension = strtoul(argv[3], NULL, 10);
+  char* fileName = argv[4];
   readFile(fileName, dimension);
 
   printf("test2");
@@ -53,12 +53,12 @@ int readFile(char* fileName, int dimension){
   FILE *fp = fopen(fileName, "r");
   int d = dimension; 
 
-  if( fp == NULL ){
+  if(fp == NULL ){
       perror("Error while opening the file.\n");
       exit(EXIT_FAILURE);
    }
 
-    int holdingArray[2*d*d];
+    int* holdingArray[(2*d*d) + 1];
     int counter = 0;
 
     while((read = getline(&line, &len, fp)) != -1){
@@ -75,7 +75,7 @@ int readFile(char* fileName, int dimension){
     int countvar = 0;
     for (int i = 0; i < d; i++){
       for (int j = 0; j < d; j++){
-        matrixA[i][j] = holdingArray[countvar];
+        matrixA[i][j] = *holdingArray[countvar];
         countvar++;
        }
     }
@@ -88,7 +88,7 @@ int readFile(char* fileName, int dimension){
 
     for (int i = 0; i < d; i++){
       for (int j = 0; j < d; j++){
-        matrixB[i][j] = holdingArray[countvar];
+        matrixB[i][j] = *holdingArray[countvar];
         countvar++;
        }
     }

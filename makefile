@@ -1,3 +1,3 @@
 strassens: strassens.c 
-	gcc -o strassens strassens.c -I.
+	gcc -o strassens -g strassens.c -I.
 
