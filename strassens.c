@@ -110,9 +110,9 @@ int** allocateQuadrant(int** matrix, int d, int quadrant){
 	// allocate memory for new quadrant matrix
 	int** newQuadrant = (int**)malloc(sizeof(int*) * h);
 	for (int i=0; i<h; i++){
-		printf("AAAAA %d\n", i);
+		// printf("AAAAA %d\n", i);
 		newQuadrant[i] = (int*) malloc(sizeof(int) * h);
-		printf("AAAAB %d\n", newQuadrant[i][0]);
+		// printf("AAAAB %d\n", newQuadrant[i][0]);
 	}
 
 	// printf("2HERE:%d\n", matrix[3][3]);
@@ -165,24 +165,31 @@ int** strassenAlgorithm(int dimension, int** matrixA, int** matrixB){
       int **x5, **x6, **x7; 
 
       // divide matrices into four parts
-      printf("3HERE %d\n", matrixA[1][1]);
+      printf("START %d\n", matrixA[1][1]);
       a00 = allocateQuadrant(matrixA, d, 0);
-      printf("4HERE %d\n", matrixA[0][0]);
+      printf("_a00 %d\n", matrixA[0][0]);
       a01 = allocateQuadrant(matrixA, d, 1);
+      printf("_a01 %d\n", matrixA[0][0]);
       a10 = allocateQuadrant(matrixA, d, 2);
+      printf("_a02 %d\n", matrixA[0][0]);
       a11 = allocateQuadrant(matrixA, d, 3);
+      printf("_a03 %d\n", matrixA[0][0]);
 
       // free Matrix A
 
       b00 = allocateQuadrant(matrixB, d, 0);
+      printf("_b00 %d\n", matrixA[0][0]);
       b01 = allocateQuadrant(matrixB, d, 1);
+      printf("_b01 %d\n", matrixA[0][0]);
       b10 = allocateQuadrant(matrixB, d, 2);
+      printf("_b10 %d\n", matrixA[0][0]);
       b11 = allocateQuadrant(matrixB, d, 3);
+      printf("_b11 %d\n", matrixA[0][0]);
 
       // free Matrix B
 
+      printf("MAKE C MATRICES \n");
       c00 = allocateMatrix(newDim);
-      printf("CCCCCCCC\n");
       c01 = allocateMatrix(newDim);
       c10 = allocateMatrix(newDim);
       c11 = allocateMatrix(newDim);
@@ -198,9 +205,7 @@ int** strassenAlgorithm(int dimension, int** matrixA, int** matrixB){
       x7 = allocateMatrix(newDim);
 
       // compute A11, B11, ... A22, B22 
-      printf("0111111\n");
       x0 = strassenAlgorithm(newDim, a11, b11);
-      printf("1111111\n");
       x1 = strassenAlgorithm(newDim, a01, b10);
       x2 = strassenAlgorithm(newDim, a00, b01);
       x3 = strassenAlgorithm(newDim, a01, b11);
@@ -213,6 +218,19 @@ int** strassenAlgorithm(int dimension, int** matrixA, int** matrixB){
       c01 = sumMatrices(x2, x3, newDim);
       c10 = sumMatrices(x4, x5, newDim);
       c11 = sumMatrices(x6, x7, newDim);
+
+      printf("***print c00\n");
+      printf("New Dim %d\n", newDim);
+      printf("A %d \n", c00[0][0]);
+
+
+      // for(int i = 0; i < newDim; i++){
+      // 	for(int j = 0; j < newDim; j++){
+      // 		printf("%d ", c00[i][j]);
+      // 	}
+      // 	printf("\n");
+      // }
+
 
       matrixA = reglue(c00, c01, c10, c11, newDim);
       printMatrix(matrixA, dimension);
@@ -259,11 +277,30 @@ int** strassenAlgorithm(int dimension, int** matrixA, int** matrixB){
 /********************************************************/
 
 int** reglue(int** a, int** b, int** c, int** d, int dimension){
-  int h = dimension/2;
+  printf("dimension: %d\n", dimension);
+  int h;
+  if (dimension <= 1){
+  	h = dimension;
+  }
+  else{
+  	h = dimension/2;
+  }
+
   int** gluedMatrix = (int**)malloc(sizeof(int*)*dimension);
   for (int i=0; i<dimension; i++){
     gluedMatrix[i] = (int*) malloc(sizeof(int)*dimension);
   }
+
+  printf("TESTING SHIT\n");
+  printf("RG A %d\n", a[0][0]);
+  printf("RG B %d\n", b[0][0]);
+  printf("RG C %d\n", c[0][0]);
+  printf("RG D %d\n", d[0][0]);
+  for (int i=0; i<h; i++){
+    for (int j=0; j<h; j++){
+    	printf("AAAAAAA IM HERE %d", a[i][j]);
+    }
+   }
 
   for (int i=0; i<h; i++){
     for (int j=0; j<h; j++){
