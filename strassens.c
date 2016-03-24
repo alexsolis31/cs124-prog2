@@ -104,15 +104,18 @@ void printMatrix(int** matrix, int dimension){
   }
 
 int** allocateQuadrant(int** matrix, int d, int quadrant){
+	printf("IN HERE\n");
 	int h = d/2;
 
 	// allocate memory for new quadrant matrix
 	int** newQuadrant = (int**)malloc(sizeof(int*) * h);
 	for (int i=0; i<h; i++){
+		printf("AAAAA %d\n", i);
 		newQuadrant[i] = (int*) malloc(sizeof(int) * h);
+		printf("AAAAB %d\n", newQuadrant[i][0]);
 	}
 
-	printf("2HERE:%d\n", matrix[3][3]);
+	// printf("2HERE:%d\n", matrix[3][3]);
 
 	for (int i = 0; i < h; i++){
 			for (int j = 0; j < h; j++){
@@ -164,52 +167,56 @@ int** strassenAlgorithm(int dimension, int** matrixA, int** matrixB){
       // divide matrices into four parts
       printf("3HERE %d\n", matrixA[1][1]);
       a00 = allocateQuadrant(matrixA, d, 0);
-      // a01 = allocateQuadrant(matrixA, d, 1);
-      // a10 = allocateQuadrant(matrixA, d, 2);
-      // a11 = allocateQuadrant(matrixA, d, 3);
+      printf("4HERE %d\n", matrixA[0][0]);
+      a01 = allocateQuadrant(matrixA, d, 1);
+      a10 = allocateQuadrant(matrixA, d, 2);
+      a11 = allocateQuadrant(matrixA, d, 3);
 
-      // // free Matrix A
+      // free Matrix A
 
-      // b00 = allocateQuadrant(matrixB, d, 0);
-      // b01 = allocateQuadrant(matrixB, d, 1);
-      // b10 = allocateQuadrant(matrixB, d, 2);
-      // b11 = allocateQuadrant(matrixB, d, 3);
+      b00 = allocateQuadrant(matrixB, d, 0);
+      b01 = allocateQuadrant(matrixB, d, 1);
+      b10 = allocateQuadrant(matrixB, d, 2);
+      b11 = allocateQuadrant(matrixB, d, 3);
 
-      // // free Matrix B
+      // free Matrix B
 
-      // c00 = allocateMatrix(newDim);
-      // c01 = allocateMatrix(newDim);
-      // c10 = allocateMatrix(newDim);
-      // c11 = allocateMatrix(newDim);
+      c00 = allocateMatrix(newDim);
+      printf("CCCCCCCC\n");
+      c01 = allocateMatrix(newDim);
+      c10 = allocateMatrix(newDim);
+      c11 = allocateMatrix(newDim);
 
 
-      // x0 = allocateMatrix(newDim);
-      // x1 = allocateMatrix(newDim);
-      // x2 = allocateMatrix(newDim);
-      // x3 = allocateMatrix(newDim);
-      // x4 = allocateMatrix(newDim);
-      // x5 = allocateMatrix(newDim);
-      // x6 = allocateMatrix(newDim);
-      // x7 = allocateMatrix(newDim);
+      x0 = allocateMatrix(newDim);
+      x1 = allocateMatrix(newDim);
+      x2 = allocateMatrix(newDim);
+      x3 = allocateMatrix(newDim);
+      x4 = allocateMatrix(newDim);
+      x5 = allocateMatrix(newDim);
+      x6 = allocateMatrix(newDim);
+      x7 = allocateMatrix(newDim);
 
-      // // compute A11, B11, ... A22, B22 
-      // x0 = strassenAlgorithm(newDim, a11, b11);
-      // x1 = strassenAlgorithm(newDim, a01, b10);
-      // x2 = strassenAlgorithm(newDim, a00, b01);
-      // x3 = strassenAlgorithm(newDim, a01, b11);
-      // x4 = strassenAlgorithm(newDim, a10, b00);
-      // x5 = strassenAlgorithm(newDim, a11, b10);
-      // x6 = strassenAlgorithm(newDim, a10, b01);
-      // x7 = strassenAlgorithm(newDim, a11, b11);
+      // compute A11, B11, ... A22, B22 
+      printf("0111111\n");
+      x0 = strassenAlgorithm(newDim, a11, b11);
+      printf("1111111\n");
+      x1 = strassenAlgorithm(newDim, a01, b10);
+      x2 = strassenAlgorithm(newDim, a00, b01);
+      x3 = strassenAlgorithm(newDim, a01, b11);
+      x4 = strassenAlgorithm(newDim, a10, b00);
+      x5 = strassenAlgorithm(newDim, a11, b10);
+      x6 = strassenAlgorithm(newDim, a10, b01);
+      x7 = strassenAlgorithm(newDim, a11, b11);
 
-      // c00 = sumMatrices(x0, x1, newDim);
-      // c01 = sumMatrices(x2, x3, newDim);
-      // c10 = sumMatrices(x4, x5, newDim);
-      // c11 = sumMatrices(x6, x7, newDim);
+      c00 = sumMatrices(x0, x1, newDim);
+      c01 = sumMatrices(x2, x3, newDim);
+      c10 = sumMatrices(x4, x5, newDim);
+      c11 = sumMatrices(x6, x7, newDim);
 
-      // matrixA = reglue(c00, c01, c10, c11, newDim);
-      // printMatrix(matrixA, dimension);
-      // return matrixA; 
+      matrixA = reglue(c00, c01, c10, c11, newDim);
+      printMatrix(matrixA, dimension);
+      return matrixA; 
     }
  }
 /********************************************************/
