@@ -28,22 +28,38 @@ int main(int argc, char **argv){
   	d = dimension + 1;
   }
 
+  int d = strtoul(argv[2], NULL, 10);
+
   // allocate matrix A
-  int** matrixA = (int**) malloc(sizeof(int*)*d);
+  int** matrixA = allocateMatrix(d);
+
   for (int i=0; i<d; i++){
-    matrixA[i] = (int*) malloc(sizeof(int)*d);
-  }
+  	for (int j=0; j<d; j++){
+	    matrixA[i][j] = 0;
+	  }
+	}
 
   // allocate matrix B
-  int** matrixB = (int**)malloc(sizeof(int*) * d);
+  int** matrixB = allocateMatrix(d);
+
   for (int i=0; i<d; i++){
-    matrixB[i] = (int*) malloc(sizeof(int)*d);
-  }
+  	for (int j=0; j<d; j++){
+	    matrixB[i][j] = 0;
+	  }
+	}
 
   char* fileName = argv[3];
+  readFile(fileName, d, matrixA, matrixB);
+  printf("HI\n");
+  printMatrix(matrixA, d);
 
-  readFile(fileName, dimension, matrixA, matrixB);
+  int** strassenMatrix = strassenAlgorithm(d, matrixA, matrixB);
+  printf("FINAL:\n");
+  printMatrix(strassenMatrix, d);
 
+  freeMatrix(matrixA, d);
+  freeMatrix(matrixB, d);
+  freeMatrix(strassenMatrix, d);
   // Timer 
 
   clock_t start, end; 
@@ -82,9 +98,8 @@ int main(int argc, char **argv){
   //   printf("Yes they are \n");
   
 
-  freeMatrix(matrixA, dimension);
-  freeMatrix(matrixB, dimension);
-  freeMatrix(strassenMatrix, dimension);
+
+  
 
   return 0;
 }
@@ -108,7 +123,7 @@ int readFile(char* fileName, int dimension, int** matrixA, int** matrixB){
     int holdingArray[numberUsed];
     int counter = 0;
 
-    while((read = getline(&line, &len, fp)) != -1 && counter <= numberUsed){
+    while(((read = getline(&line, &len, fp)) != -1) && (counter <= numberUsed)){
       ch1 = atoi(line);
       holdingArray[counter] = ch1; 
       counter++;
@@ -130,15 +145,11 @@ int readFile(char* fileName, int dimension, int** matrixA, int** matrixB){
         countvar++;
        }
     }
+
     fclose(fp);
 
     sumMatrices(matrixA, matrixB, dimension);
     subMatrices(matrixB, matrixA, dimension);
-    // int** aTest = allocateQuadrant(matrixA, dimension, 0);
-    // int** bTest = allocateQuadrant(matrixA, dimension, 1);
-    // int** cTest = allocateQuadrant(matrixA, dimension, 2);
-    // int** dTest = allocateQuadrant(matrixA, dimension, 3);
-    // reglue(aTest,bTest,cTest,dTest,dimension);
     return 0; 
 }
 
@@ -191,12 +202,52 @@ int** allocateQuadrant(int** matrix, int d, int quadrant){
 	return newQuadrant;
 }
  
+// <<<<<<< HEAD
+// int** strassenAlgorithm(int d, int** matrixA, int** matrixB){
+
+// 	if (d%2!=0){
+
+// 		 // realloc for matrixA
+// 		 printf("Tester malloced:\n");
+// 		 printMatrix(matrixA, d);
+
+// 		 matrixA = realloc(matrixA, (d+1)*(d+1) * sizeof(int*));
+
+// 		 for (int i=0; i<d+1; i++){
+// 		 	matrixA[i] = realloc(matrixA[i], (d+1) * sizeof(int));
+// 		 }
+
+// 		 // matrixA = realloc(matrixA, (d+1)*(d+1) * sizeof(int*));
+// 		 printf("Tester realloced:\n");
+// 		 printMatrix(matrixA, d+1);
+
+// 		 //realloc for matrixB
+// 		 matrixB = realloc(matrixB, (d+1)*(d+1) * sizeof(int*));
+
+// 		 // for(int i = 0; i <d; i++){
+// 		 // 	for (int j=0; j<d; j++){
+// 		 // 		matrixB[i][j] = 1;
+// 		 // 	}
+// 		 // }
+
+// 		 for (int i=0; i<d+1; i++){
+// 		 	matrixB[i] = realloc(matrixB[i], (d+1) * sizeof(int));
+// 		 }
+
+// 		 // matrixB = realloc(matrixB, (d+1)*(d+1) * sizeof(int*));
+// 		 printf("Tester realloced:\n");
+// 		 printMatrix(matrixB, d+1);
+
+// 		 int** matrixC = allocateMatrix(d+1);
+
+// 	}
+// 	else{
+//     	int** matrixC = allocateMatrix(d);
+//     }
+// =======
 int** strassenAlgorithm(int dimension, int** matrixA, int** matrixB, int n0){
     int d = dimension;
 
-    int** matrixC = allocateMatrix(d);
-    
-    // Base Case: when matrix is 1x1 (scalar multiplication)
     if (d <= n0){
       matrixC = regularMult(dimension, matrixA, matrixB);
       return matrixC; 
@@ -204,7 +255,6 @@ int** strassenAlgorithm(int dimension, int** matrixA, int** matrixB, int n0){
     }
 
     else{
-      countess++; 
       int newDim = d/2; 
 
       int **a00, **a01, **a10, **a11; 
@@ -263,7 +313,7 @@ int** strassenAlgorithm(int dimension, int** matrixA, int** matrixB, int n0){
       c10 = sumMatrices(P2, P4, newDim);
       c11 = sumMatrices(subMatrices(sumMatrices(P1, P3, newDim), P2, newDim), P6, newDim);
 
-      matrixC = reglue(c00, c01, c10, c11, dimension);
+      matrixC = reglue(c00, c01, c10, c11, d);
       // printMatrix(matrixC, dimension);
       freeMatrix(P1, newDim);
       freeMatrix(P2, newDim);
