@@ -17,6 +17,10 @@ int main(int argc, char **argv){
   int dimension = strtoul(argv[2], NULL, 10);
   int d;
 
+  if (flag == 0){
+    flag = 1; 
+  }
+
   if (dimension % 2 == 0){
   	d = dimension;
   }
@@ -52,7 +56,7 @@ int main(int argc, char **argv){
 
   cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
 
-  printf("CPU time used: %f\n", cpu_time_used);
+  // printf("CPU time used: %f\n", cpu_time_used);
 
   // printf("Strassen Done Matrix: \n");
   // printMatrix(strassenMatrix, dimension);
@@ -63,10 +67,10 @@ int main(int argc, char **argv){
   // printMatrix(traditionalMatrix, dimension);
   // printf("\n");
 
-  // int** strassenCleaned = cleanMatrix(strassenMatrix, dimension);
+  int** strassenCleaned = cleanMatrix(strassenMatrix, dimension);
   // printf("Cleaned Strassen Matrix: \n");
-  // printMatrix(strassenCleaned, dimension);
-  // printf("\n");
+  printMatrix(strassenCleaned, dimension);
+  printf("\n");
 
   // int** traditionalCleaned = cleanMatrix(traditionalMatrix, dimension);
   // printf("Cleaned Traditional  Matrix: \n");
