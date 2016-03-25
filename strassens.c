@@ -19,6 +19,10 @@ int main(int argc, char **argv){
 
   // printf("ARGV4: %s\n", argv[3]);
 
+  // printf("HERE %s", argv[2]);
+  // int matrixA[d][d];
+  // int matrixB[d][d];
+
   // allocate matrix A
   int** matrixA = (int**) malloc(sizeof(int*)*d);
   for (int i=0; i<d; i++){
@@ -31,18 +35,17 @@ int main(int argc, char **argv){
     matrixB[i] = (int*) malloc(sizeof(int)*d);
   }
 
-  // int** matrixC = (int**)malloc(sizeof(int*) * d);
-  // for (int i=0; i<d; i++){
-  //   matrixC[i] = (int*) malloc(sizeof(int)*d);
-  // }
-
-
   char* fileName = argv[3];
 
   readFile(fileName, dimension, matrixA, matrixB);
 
-  int** matrixC = strassenAlgorithm(dimension, matrixA, matrixB);
-  printMatrix(matrixC, dimension);
+  int** strassenMatrix = strassenAlgorithm(dimension, matrixA, matrixB);
+  printMatrix(strassenMatrix, dimension);
+
+  freeMatrix(matrixA, d);
+  freeMatrix(matrixB, d);
+  freeMatrix(strassenMatrix, d);
+
   return 0;
 }
 
@@ -108,6 +111,13 @@ void printMatrix(int** matrix, int dimension){
  	}
   }
 
+void freeMatrix(int** matrix, int d){
+	for (int i=0; i<d; i++){
+		int* currentPtr = matrix[i];
+		free(currentPtr);
+	}
+}
+
 int** allocateQuadrant(int** matrix, int d, int quadrant){
 	int h = d/2;
 
@@ -141,8 +151,6 @@ int** allocateQuadrant(int** matrix, int d, int quadrant){
 	return newQuadrant;
 }
  
-
-
 int** strassenAlgorithm(int dimension, int** matrixA, int** matrixB){
     int d = dimension;
 
@@ -218,11 +226,42 @@ int** strassenAlgorithm(int dimension, int** matrixA, int** matrixB){
 
       matrixC = reglue(c00, c01, c10, c11, dimension);
       // printMatrix(matrixC, dimension);
+      freeMatrix(P1, newDim);
+      freeMatrix(P2, newDim);
+      freeMatrix(P3, newDim);
+      freeMatrix(P4, newDim);
+      freeMatrix(P5, newDim);
+      freeMatrix(P6, newDim);
+      freeMatrix(P7, newDim);
+
+      freeMatrix(c00, newDim);
+      freeMatrix(c01, newDim);
+      freeMatrix(c10, newDim);
+      freeMatrix(c11, newDim);
+
+      freeMatrix(a00, newDim);
+      freeMatrix(a01, newDim);
+      freeMatrix(a10, newDim);
+      freeMatrix(a11, newDim);
+
+      freeMatrix(b00, newDim);
+      freeMatrix(b01, newDim);
+      freeMatrix(b10, newDim);
+      freeMatrix(b11, newDim);
+
       return matrixC; 
     }
  }
-/********************************************************/
- // sum two matrices 
+
+// int** regularMult(int dimension, int** matrixA, int** matrixB){
+// 	int** regularMatrix = allocateMatrix(dimension);
+
+
+
+// }
+
+// sum two matrices
+/********************************************************/ 
  int** sumMatrices(int** a, int** b, int dimension){
     int** matrixSum = allocateMatrix(dimension);
 
@@ -235,8 +274,9 @@ int** strassenAlgorithm(int dimension, int** matrixA, int** matrixB){
     return matrixSum; 
  }
 
-/********************************************************/
  // subtract two matrices 
+ // sub two matrices
+/********************************************************/
  int** subMatrices(int** a, int** b, int dimension){
     int** matrixSum = allocateMatrix(dimension);
 
@@ -271,7 +311,6 @@ int** strassenAlgorithm(int dimension, int** matrixA, int** matrixB){
 
     return matrix; 
  }
-
 /********************************************************/
 
 int** reglue(int** a, int** b, int** c, int** d, int dimension){
