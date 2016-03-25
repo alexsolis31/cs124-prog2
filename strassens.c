@@ -28,17 +28,21 @@ int main(int argc, char **argv){
   // allocate matrix B
   int** matrixB = allocateMatrix(d);
 
+<<<<<<< HEAD
   for (int i=0; i<d; i++){
   	for (int j=0; j<d; j++){
 	    matrixB[i][j] = 0;
 	  }
 	}
 
+=======
+>>>>>>> f6af0dd6dee3de53f011801e0794ec8503ff1fb1
   char* fileName = argv[3];
   readFile(fileName, d, matrixA, matrixB);
   printf("HI\n");
   printMatrix(matrixA, d);
 
+<<<<<<< HEAD
   int** strassenMatrix = strassenAlgorithm(d, matrixA, matrixB);
   printf("FINAL:\n");
   printMatrix(strassenMatrix, d);
@@ -46,6 +50,45 @@ int main(int argc, char **argv){
   freeMatrix(matrixA, d);
   freeMatrix(matrixB, d);
   freeMatrix(strassenMatrix, d);
+=======
+  // Timer 
+
+  clock_t start, end; 
+  double cpu_time_used; 
+
+
+  start = clock();
+  int** strassenMatrix = strassenAlgorithm(dimension, matrixA, matrixB, flag);
+  end = clock(); 
+
+  cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
+
+  printf("CPU time used: %f\n", cpu_time_used);
+
+  // printf("Strassen Done Matrix: \n");
+  // printMatrix(strassenMatrix, dimension);
+  // printf("\n");
+
+  // int** traditionalMatrix = regularMult(dimension, matrixA, matrixB);
+  // printf("Traditional Done Matrix: \n");
+  // printMatrix(traditionalMatrix, dimension);
+  // printf("\n");
+
+  // int** strassenCleaned = cleanMatrix(strassenMatrix, dimension);
+  // printf("Cleaned Strassen Matrix: \n");
+  // printMatrix(strassenCleaned, dimension);
+  // printf("\n");
+
+  // int** traditionalCleaned = cleanMatrix(traditionalMatrix, dimension);
+  // printf("Cleaned Traditional  Matrix: \n");
+  // printMatrix(traditionalCleaned, dimension);
+  // printf("\n");
+
+  // printf("Are they the same tho?\n");
+  // if(compareMatrices(strassenCleaned, traditionalCleaned, dimension) == 0)
+  //   printf("Yes they are \n");
+  
+>>>>>>> f6af0dd6dee3de53f011801e0794ec8503ff1fb1
 
   
 
@@ -150,51 +193,54 @@ int** allocateQuadrant(int** matrix, int d, int quadrant){
 	return newQuadrant;
 }
  
-int** strassenAlgorithm(int d, int** matrixA, int** matrixB){
+// <<<<<<< HEAD
+// int** strassenAlgorithm(int d, int** matrixA, int** matrixB){
 
-	if (d%2!=0){
+// 	if (d%2!=0){
 
-		 // realloc for matrixA
-		 printf("Tester malloced:\n");
-		 printMatrix(matrixA, d);
+// 		 // realloc for matrixA
+// 		 printf("Tester malloced:\n");
+// 		 printMatrix(matrixA, d);
 
-		 matrixA = realloc(matrixA, (d+1)*(d+1) * sizeof(int*));
+// 		 matrixA = realloc(matrixA, (d+1)*(d+1) * sizeof(int*));
 
-		 for (int i=0; i<d+1; i++){
-		 	matrixA[i] = realloc(matrixA[i], (d+1) * sizeof(int));
-		 }
+// 		 for (int i=0; i<d+1; i++){
+// 		 	matrixA[i] = realloc(matrixA[i], (d+1) * sizeof(int));
+// 		 }
 
-		 // matrixA = realloc(matrixA, (d+1)*(d+1) * sizeof(int*));
-		 printf("Tester realloced:\n");
-		 printMatrix(matrixA, d+1);
+// 		 // matrixA = realloc(matrixA, (d+1)*(d+1) * sizeof(int*));
+// 		 printf("Tester realloced:\n");
+// 		 printMatrix(matrixA, d+1);
 
-		 //realloc for matrixB
-		 matrixB = realloc(matrixB, (d+1)*(d+1) * sizeof(int*));
+// 		 //realloc for matrixB
+// 		 matrixB = realloc(matrixB, (d+1)*(d+1) * sizeof(int*));
 
-		 // for(int i = 0; i <d; i++){
-		 // 	for (int j=0; j<d; j++){
-		 // 		matrixB[i][j] = 1;
-		 // 	}
-		 // }
+// 		 // for(int i = 0; i <d; i++){
+// 		 // 	for (int j=0; j<d; j++){
+// 		 // 		matrixB[i][j] = 1;
+// 		 // 	}
+// 		 // }
 
-		 for (int i=0; i<d+1; i++){
-		 	matrixB[i] = realloc(matrixB[i], (d+1) * sizeof(int));
-		 }
+// 		 for (int i=0; i<d+1; i++){
+// 		 	matrixB[i] = realloc(matrixB[i], (d+1) * sizeof(int));
+// 		 }
 
-		 // matrixB = realloc(matrixB, (d+1)*(d+1) * sizeof(int*));
-		 printf("Tester realloced:\n");
-		 printMatrix(matrixB, d+1);
+// 		 // matrixB = realloc(matrixB, (d+1)*(d+1) * sizeof(int*));
+// 		 printf("Tester realloced:\n");
+// 		 printMatrix(matrixB, d+1);
 
-		 int** matrixC = allocateMatrix(d+1);
+// 		 int** matrixC = allocateMatrix(d+1);
 
-	}
-	else{
-    	int** matrixC = allocateMatrix(d);
-    }
+// 	}
+// 	else{
+//     	int** matrixC = allocateMatrix(d);
+//     }
+// =======
+int** strassenAlgorithm(int dimension, int** matrixA, int** matrixB, int n0){
+    int d = dimension;
 
-    // Base Case: when matrix is 1x1 (scalar multiplication)
-    if (d == 1){
-      matrixC[0][0] = matrixA[0][0] * matrixB[0][0];
+    if (d <= n0){
+      matrixC = regularMult(dimension, matrixA, matrixB);
       return matrixC; 
 
     }
@@ -244,13 +290,13 @@ int** strassenAlgorithm(int d, int** matrixA, int** matrixB){
       y = allocateMatrix(newDim);
 
       // compute A11, B11, ... A22, B22 
-      P1 = strassenAlgorithm(newDim, sumMatrices(a00, a11, newDim), sumMatrices(b00, b11, newDim));
-      P2 = strassenAlgorithm(newDim, sumMatrices(a10, a11, newDim), b00);
-      P3 = strassenAlgorithm(newDim, a00, subMatrices(b01, b11, newDim));
-      P4 = strassenAlgorithm(newDim, a11, subMatrices(b10, b00, newDim));
-      P5 = strassenAlgorithm(newDim, sumMatrices(a00, a01, newDim), b11);
-      P6 = strassenAlgorithm(newDim, subMatrices(a10, a00, newDim), sumMatrices(b00, b01, newDim));
-      P7 = strassenAlgorithm(newDim, subMatrices(a01, a11, newDim), sumMatrices(b10, b11, newDim));
+      P1 = strassenAlgorithm(newDim, sumMatrices(a00, a11, newDim), sumMatrices(b00, b11, newDim), n0);
+      P2 = strassenAlgorithm(newDim, sumMatrices(a10, a11, newDim), b00, n0);
+      P3 = strassenAlgorithm(newDim, a00, subMatrices(b01, b11, newDim), n0);
+      P4 = strassenAlgorithm(newDim, a11, subMatrices(b10, b00, newDim), n0);
+      P5 = strassenAlgorithm(newDim, sumMatrices(a00, a01, newDim), b11, n0);
+      P6 = strassenAlgorithm(newDim, subMatrices(a10, a00, newDim), sumMatrices(b00, b01, newDim), n0);
+      P7 = strassenAlgorithm(newDim, subMatrices(a01, a11, newDim), sumMatrices(b10, b11, newDim), n0);
 
       // printMatrix(x0, newDim);
       c00 = sumMatrices(subMatrices(sumMatrices(P1, P4, newDim), P5, newDim), P7, newDim);
@@ -287,12 +333,24 @@ int** strassenAlgorithm(int d, int** matrixA, int** matrixB){
     }
  }
 
-// int** regularMult(int dimension, int** matrixA, int** matrixB){
-// 	int** regularMatrix = allocateMatrix(dimension);
+int** regularMult(int dimension, int** matrixA, int** matrixB){
+  int** regularMatrix = allocateMatrix(dimension);
+  int sum = 0; 
 
+  for (int i = 0; i < dimension; i++){
+      for (int j = 0; j < dimension; j++){
+          for (int k = 0; k < dimension; k++){
+              sum = sum + matrixA[i][k] * matrixB[k][j];
+          }
 
+          regularMatrix[i][j] = sum;
+          sum = 0; 
+      }
 
-// }
+  }        
+
+  return regularMatrix; 
+}
 
 // sum two matrices
 /********************************************************/ 
@@ -373,7 +431,30 @@ int** reglue(int** a, int** b, int** c, int** d, int dimension){
 
   return gluedMatrix; 
  }
+/********************************************************/
+// function that returns only diagonal of a matrix
+  int** cleanMatrix(int** matrix, int d){
+    for(int i = 0; i < d; i++){
+      for(int j = 0; j < d; j++){
+        if(i != j){
+          matrix[i][j] = 0; 
+        }
+      }
+    }
+    return matrix; 
+  }
+/********************************************************/
+// function to compare two matrices
+  int compareMatrices(int** matrixA, int**matrixB, int d){
+     int notEqual = 0; 
+     for(int i = 0; i < d; i++){
+        if(matrixA[i][i] != matrixB[i][i]){
+          notEqual = 1; 
+          printf("Not Equal at [%d][%d]", matrixA[i][i], matrixB[i][i]);
+        }
 
-
+     }
+     return notEqual; 
+  }
 
 
