@@ -17,49 +17,33 @@ int main(int argc, char **argv){
   int dimension = strtoul(argv[2], NULL, 10);
   int d;
 
-  if (flag == 0){
-    flag = 1; 
-  }
-
   if (dimension % 2 == 0){
-  	d = dimension;
+    d = dimension;
   }
   else{
-  	d = dimension + 1;
+    d = dimension + 1;
   }
 
-  int d = strtoul(argv[2], NULL, 10);
+  if (flag == 0){
+    flag = 1;
+  }
 
   // allocate matrix A
-  int** matrixA = allocateMatrix(d);
-
+  int** matrixA = (int**) malloc(sizeof(int*)*d);
   for (int i=0; i<d; i++){
-  	for (int j=0; j<d; j++){
-	    matrixA[i][j] = 0;
-	  }
-	}
+    matrixA[i] = (int*) malloc(sizeof(int)*d);
+  }
 
   // allocate matrix B
-  int** matrixB = allocateMatrix(d);
-
+  int** matrixB = (int**)malloc(sizeof(int*) * d);
   for (int i=0; i<d; i++){
-  	for (int j=0; j<d; j++){
-	    matrixB[i][j] = 0;
-	  }
-	}
+    matrixB[i] = (int*) malloc(sizeof(int)*d);
+  }
 
   char* fileName = argv[3];
-  readFile(fileName, d, matrixA, matrixB);
-  printf("HI\n");
-  printMatrix(matrixA, d);
 
-  int** strassenMatrix = strassenAlgorithm(d, matrixA, matrixB);
-  printf("FINAL:\n");
-  printMatrix(strassenMatrix, d);
+  readFile(fileName, dimension, matrixA, matrixB);
 
-  freeMatrix(matrixA, d);
-  freeMatrix(matrixB, d);
-  freeMatrix(strassenMatrix, d);
   // Timer 
 
   clock_t start, end; 
@@ -70,9 +54,9 @@ int main(int argc, char **argv){
   int** strassenMatrix = strassenAlgorithm(dimension, matrixA, matrixB, flag);
   end = clock(); 
 
-  cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
+  // cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
 
-  // printf("CPU time used: %f\n", cpu_time_used);
+  printf("CPU time used: %f\n", cpu_time_used);
 
   // printf("Strassen Done Matrix: \n");
   // printMatrix(strassenMatrix, dimension);
@@ -98,8 +82,9 @@ int main(int argc, char **argv){
   //   printf("Yes they are \n");
   
 
-
-  
+  freeMatrix(matrixA, dimension);
+  freeMatrix(matrixB, dimension);
+  freeMatrix(strassenMatrix, dimension);
 
   return 0;
 }
@@ -123,13 +108,13 @@ int readFile(char* fileName, int dimension, int** matrixA, int** matrixB){
     int holdingArray[numberUsed];
     int counter = 0;
 
-    while(((read = getline(&line, &len, fp)) != -1) && (counter <= numberUsed)){
+    while((read = getline(&line, &len, fp)) != -1 && counter <= numberUsed){
       ch1 = atoi(line);
       holdingArray[counter] = ch1; 
       counter++;
     }
 
-	// fill matrix A
+  // fill matrix A
     int countvar = 0;
     for (int i = 0; i < d; i++){
       for (int j = 0; j < d; j++){
@@ -138,116 +123,80 @@ int readFile(char* fileName, int dimension, int** matrixA, int** matrixB){
        }
     }
 
-	// fill matrix B
+  // fill matrix B
     for (int i = 0; i < d; i++){
       for (int j = 0; j < d; j++){
         matrixB[i][j] = holdingArray[countvar];
         countvar++;
        }
     }
-
     fclose(fp);
 
     sumMatrices(matrixA, matrixB, dimension);
     subMatrices(matrixB, matrixA, dimension);
+    // int** aTest = allocateQuadrant(matrixA, dimension, 0);
+    // int** bTest = allocateQuadrant(matrixA, dimension, 1);
+    // int** cTest = allocateQuadrant(matrixA, dimension, 2);
+    // int** dTest = allocateQuadrant(matrixA, dimension, 3);
+    // reglue(aTest,bTest,cTest,dTest,dimension);
     return 0; 
 }
 
 void printMatrix(int** matrix, int dimension){
-	for (int i=0; i<dimension; i++){
- 		for (int j=0; j<dimension; j++){
- 			printf("%d ", matrix[i][j]);
- 		}
- 		printf("\n");
- 	}
+  for (int i=0; i<dimension; i++){
+    for (int j=0; j<dimension; j++){
+      printf("%d ", matrix[i][j]);
+    }
+    printf("\n");
+  }
   }
 
 void freeMatrix(int** matrix, int d){
-	for (int i=0; i<d; i++){
-		int* currentPtr = matrix[i];
-		free(currentPtr);
-	}
+  for (int i=0; i<d; i++){
+    int* currentPtr = matrix[i];
+    free(currentPtr);
+  }
 }
 
 int** allocateQuadrant(int** matrix, int d, int quadrant){
-	int h = d/2;
+  int h = d/2;
 
-	// allocate memory for new quadrant matrix
-	int** newQuadrant = (int**)malloc(sizeof(int*) * h);
-	for (int i=0; i<h; i++){
-		newQuadrant[i] = (int*) malloc(sizeof(int) * h);
-	}
+  // allocate memory for new quadrant matrix
+  int** newQuadrant = (int**)malloc(sizeof(int*) * h);
+  for (int i=0; i<h; i++){
+    newQuadrant[i] = (int*) malloc(sizeof(int) * h);
+  }
 
-	// printf("2HERE:%d\n", matrix[3][3]);
+  // printf("2HERE:%d\n", matrix[3][3]);
 
-	for (int i = 0; i < h; i++){
-			for (int j = 0; j < h; j++){
-				switch(quadrant){
-				case 0: //upper left
-					newQuadrant[i][j] = matrix[i][j];
-					break;
-				case 1: //upper right
-					newQuadrant[i][j] = matrix[i][j+h];
-					break;
-				case 2: // bottom left
-					newQuadrant[i][j] = matrix[i+h][j];
-					break;
-				case 3: // bottom right
-					newQuadrant[i][j] = matrix[i+h][j+h];
-					break;
+  for (int i = 0; i < h; i++){
+      for (int j = 0; j < h; j++){
+        switch(quadrant){
+        case 0: //upper left
+          newQuadrant[i][j] = matrix[i][j];
+          break;
+        case 1: //upper right
+          newQuadrant[i][j] = matrix[i][j+h];
+          break;
+        case 2: // bottom left
+          newQuadrant[i][j] = matrix[i+h][j];
+          break;
+        case 3: // bottom right
+          newQuadrant[i][j] = matrix[i+h][j+h];
+          break;
 
-			}
-		}
-	}
-	return newQuadrant;
+      }
+    }
+  }
+  return newQuadrant;
 }
  
-// <<<<<<< HEAD
-// int** strassenAlgorithm(int d, int** matrixA, int** matrixB){
-
-// 	if (d%2!=0){
-
-// 		 // realloc for matrixA
-// 		 printf("Tester malloced:\n");
-// 		 printMatrix(matrixA, d);
-
-// 		 matrixA = realloc(matrixA, (d+1)*(d+1) * sizeof(int*));
-
-// 		 for (int i=0; i<d+1; i++){
-// 		 	matrixA[i] = realloc(matrixA[i], (d+1) * sizeof(int));
-// 		 }
-
-// 		 // matrixA = realloc(matrixA, (d+1)*(d+1) * sizeof(int*));
-// 		 printf("Tester realloced:\n");
-// 		 printMatrix(matrixA, d+1);
-
-// 		 //realloc for matrixB
-// 		 matrixB = realloc(matrixB, (d+1)*(d+1) * sizeof(int*));
-
-// 		 // for(int i = 0; i <d; i++){
-// 		 // 	for (int j=0; j<d; j++){
-// 		 // 		matrixB[i][j] = 1;
-// 		 // 	}
-// 		 // }
-
-// 		 for (int i=0; i<d+1; i++){
-// 		 	matrixB[i] = realloc(matrixB[i], (d+1) * sizeof(int));
-// 		 }
-
-// 		 // matrixB = realloc(matrixB, (d+1)*(d+1) * sizeof(int*));
-// 		 printf("Tester realloced:\n");
-// 		 printMatrix(matrixB, d+1);
-
-// 		 int** matrixC = allocateMatrix(d+1);
-
-// 	}
-// 	else{
-//     	int** matrixC = allocateMatrix(d);
-//     }
-// =======
 int** strassenAlgorithm(int dimension, int** matrixA, int** matrixB, int n0){
     int d = dimension;
 
+    int** matrixC = allocateMatrix(d);
+    
+    // Base Case: when matrix is 1x1 (scalar multiplication)
     if (d <= n0){
       matrixC = regularMult(dimension, matrixA, matrixB);
       return matrixC; 
@@ -255,6 +204,7 @@ int** strassenAlgorithm(int dimension, int** matrixA, int** matrixB, int n0){
     }
 
     else{
+      countess++; 
       int newDim = d/2; 
 
       int **a00, **a01, **a10, **a11; 
@@ -313,7 +263,7 @@ int** strassenAlgorithm(int dimension, int** matrixA, int** matrixB, int n0){
       c10 = sumMatrices(P2, P4, newDim);
       c11 = sumMatrices(subMatrices(sumMatrices(P1, P3, newDim), P2, newDim), P6, newDim);
 
-      matrixC = reglue(c00, c01, c10, c11, d);
+      matrixC = reglue(c00, c01, c10, c11, dimension);
       // printMatrix(matrixC, dimension);
       freeMatrix(P1, newDim);
       freeMatrix(P2, newDim);
@@ -417,10 +367,10 @@ int** regularMult(int dimension, int** matrixA, int** matrixB){
 int** reglue(int** a, int** b, int** c, int** d, int dimension){
   int h;
   if (dimension <= 1){
-  	h = dimension;
+    h = dimension;
   }
   else{
-  	h = dimension/2;
+    h = dimension/2;
   }
 
   int** gluedMatrix = (int**)malloc(sizeof(int*)*dimension);
