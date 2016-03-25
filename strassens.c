@@ -44,7 +44,29 @@ int main(int argc, char **argv){
   readFile(fileName, dimension, matrixA, matrixB);
 
   int** strassenMatrix = strassenAlgorithm(dimension, matrixA, matrixB);
+  printf("Strassen Done Matrix: \n");
   printMatrix(strassenMatrix, dimension);
+  printf("\n");
+
+  int** traditionalMatrix = regularMult(dimension, matrixA, matrixB);
+  printf("Traditional Done Matrix: \n");
+  printMatrix(traditionalMatrix, dimension);
+  printf("\n");
+
+  int** strassenCleaned = cleanMatrix(strassenMatrix, dimension);
+  printf("Cleaned Strassen Matrix: \n");
+  printMatrix(strassenCleaned, dimension);
+  printf("\n");
+
+  int** traditionalCleaned = cleanMatrix(traditionalMatrix, dimension);
+  printf("Cleaned Traditional  Matrix: \n");
+  printMatrix(traditionalCleaned, dimension);
+  printf("\n");
+
+  printf("Are they the same tho?\n");
+  if(compareMatrices(strassenCleaned, traditionalCleaned, dimension) == 0)
+    printf("Yes they are \n");
+  
 
   freeMatrix(matrixA, dimension);
   freeMatrix(matrixB, dimension);
@@ -257,12 +279,24 @@ int** strassenAlgorithm(int dimension, int** matrixA, int** matrixB){
     }
  }
 
-// int** regularMult(int dimension, int** matrixA, int** matrixB){
-// 	int** regularMatrix = allocateMatrix(dimension);
+int** regularMult(int dimension, int** matrixA, int** matrixB){
+  int** regularMatrix = allocateMatrix(dimension);
+  int sum = 0; 
 
+  for (int i = 0; i < dimension; i++){
+      for (int j = 0; j < dimension; j++){
+          for (int k = 0; k < dimension; k++){
+              sum = sum + matrixA[i][k] * matrixB[k][j];
+          }
 
+          regularMatrix[i][j] = sum;
+          sum = 0; 
+      }
 
-// }
+  }        
+
+  return regularMatrix; 
+}
 
 // sum two matrices
 /********************************************************/ 
@@ -343,7 +377,30 @@ int** reglue(int** a, int** b, int** c, int** d, int dimension){
 
   return gluedMatrix; 
  }
+/********************************************************/
+// function that returns only diagonal of a matrix
+  int** cleanMatrix(int** matrix, int d){
+    for(int i = 0; i < d; i++){
+      for(int j = 0; j < d; j++){
+        if(i != j){
+          matrix[i][j] = 0; 
+        }
+      }
+    }
+    return matrix; 
+  }
+/********************************************************/
+// function to compare two matrices
+  int compareMatrices(int** matrixA, int**matrixB, int d){
+     int notEqual = 0; 
+     for(int i = 0; i < d; i++){
+        if(matrixA[i][i] != matrixB[i][i]){
+          notEqual = 1; 
+          printf("Not Equal at [%d][%d]", matrixA[i][i], matrixB[i][i]);
+        }
 
-
+     }
+     return notEqual; 
+  }
 
 

@@ -25,6 +25,9 @@ int** allocateMatrix(int d);
 int** reglue(int** a, int** b, int** c, int** d, int dimension);
 int** regularMult(int dimension, int** matrixA, int** matrixB);
 void freeMatrix(int** matrix, int d);
+int compareMatrices(int** matrixA, int**matrixB, int dimension);
+
+int** cleanMatrix(int** matrix, int d);
 // int** allocateUpperLeft(int** matrix, int dimension);
 // int** allocateUpperRight(int** matrix, int dimension);
 // int** allocateBottomLeft(int** matrix, int dimension);
