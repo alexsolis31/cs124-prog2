@@ -153,70 +153,53 @@ int** allocateQuadrant(int** matrix, int d, int quadrant){
 int** strassenAlgorithm(int d, int** matrixA, int** matrixB){
 
 	if (d%2!=0){
-	  // matrix = (int**) malloc(d * sizeof(double*));
-	  // (int*) malloc(d * sizeof(double));
 
-	 // int** tester = (int**) malloc(d * sizeof(int));
-	 // for (int i=0; i<d; i++){
-	 // 	tester[i] = 0;
-	 // }
+		 // realloc for matrixA
+		 printf("Tester malloced:\n");
+		 printMatrix(matrixA, d);
 
-	 int** tester = allocateMatrix(d);
-	 printf("Tester malloced:\n");
-	 printMatrix(tester, d);
+		 matrixA = realloc(matrixA, (d+1)*(d+1) * sizeof(int*));
 
-	 tester = realloc(tester, (d+1)*(d+1) * sizeof(int*));
+		 for (int i=0; i<d+1; i++){
+		 	matrixA[i] = realloc(matrixA[i], (d+1) * sizeof(int));
+		 }
 
-	 for(int i = 0; i <d; i++){
-	 	for (int j=0; j<d; j++){
-	 		tester[i][j] = 1;
-	 	}
-	 }
+		 // matrixA = realloc(matrixA, (d+1)*(d+1) * sizeof(int*));
+		 printf("Tester realloced:\n");
+		 printMatrix(matrixA, d+1);
 
-	 for (int i=0; i<d+1; i++){
-	 	tester[i] = realloc(tester[i], (d+1) * sizeof(int));
-	 }
+		 //realloc for matrixB
+		 matrixB = realloc(matrixB, (d+1)*(d+1) * sizeof(int*));
 
-	 tester = realloc(tester, (d+1)*(d+1) * sizeof(int*));
-	 printf("Tester realloced:\n");
-	 printMatrix(tester, d+1);
-	 // for (int i =0;i<d+1;i++){
-	 // 	printf("%d\n", *tester[i]);
-	 // }
+		 // for(int i = 0; i <d; i++){
+		 // 	for (int j=0; j<d; j++){
+		 // 		matrixB[i][j] = 1;
+		 // 	}
+		 // }
 
+		 for (int i=0; i<d+1; i++){
+		 	matrixB[i] = realloc(matrixB[i], (d+1) * sizeof(int));
+		 }
 
+		 // matrixB = realloc(matrixB, (d+1)*(d+1) * sizeof(int*));
+		 printf("Tester realloced:\n");
+		 printMatrix(matrixB, d+1);
 
-	  // printf("1TA:\n");
-	  // printMatrix(matrixA, d);
-	  // printf("1TB:\n");
-	  // printMatrix(matrixB, d);
+		 int** matrixC = allocateMatrix(d+1);
 
-	  // matrixA = (int**) realloc(matrixA, ((d+1) * sizeof(int*)));
-	  // matrixB = (int**) realloc(matrixB, ((d+1) * sizeof(int*)));
-
-	  // // tester = (int**) realloc(tester, ((d+1) * sizeof(int*)));
-	  // // for (int i = 0; i<d+1; i++){
-	  // // 	tester[i] = (int*) realloc(tester[i],((d+1) * sizeof(int)));
-	  // // }
-	  // printf("\n 2TA:\n");
-	  // printMatrix(matrixA, d+2);
-	  // printf("\n 2TB:\n");
-	  // printMatrix(matrixB, d+1);
-	  // printf("\n");
 	}
+	else{
+    	int** matrixC = allocateMatrix(d);
+    }
 
-    int** matrixC = allocateMatrix(d);
-    
     // Base Case: when matrix is 1x1 (scalar multiplication)
     if (d == 1){
-      countess++; 
       matrixC[0][0] = matrixA[0][0] * matrixB[0][0];
       return matrixC; 
 
     }
 
     else{
-      countess++; 
       int newDim = d/2; 
 
       int **a00, **a01, **a10, **a11; 
