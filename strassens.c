@@ -36,40 +36,46 @@ int main(int argc, char **argv){
     matrixB[i] = (int*) malloc(sizeof(int)*d);
   }
 
-  printf("HEY\n");
-  printMatrix(matrixB, dimension);
-
   char* fileName = argv[3];
 
   readFile(fileName, dimension, matrixA, matrixB);
 
-<<<<<<< HEAD
-  int** strassenMatrix = strassenAlgorithm(dimension, matrixA, matrixB);
-  printf("Strassen Done Matrix: \n");
-=======
-  int** strassenMatrix = strassenAlgorithm(d, matrixA, matrixB);
->>>>>>> f376148bd0a64c7eda064b0aee1cec7c350cbcab
-  printMatrix(strassenMatrix, dimension);
-  printf("\n");
+  // Timer 
 
-  int** traditionalMatrix = regularMult(dimension, matrixA, matrixB);
-  printf("Traditional Done Matrix: \n");
-  printMatrix(traditionalMatrix, dimension);
-  printf("\n");
+  clock_t start, end; 
+  double cpu_time_used; 
 
-  int** strassenCleaned = cleanMatrix(strassenMatrix, dimension);
-  printf("Cleaned Strassen Matrix: \n");
-  printMatrix(strassenCleaned, dimension);
-  printf("\n");
 
-  int** traditionalCleaned = cleanMatrix(traditionalMatrix, dimension);
-  printf("Cleaned Traditional  Matrix: \n");
-  printMatrix(traditionalCleaned, dimension);
-  printf("\n");
+  start = clock();
+  int** strassenMatrix = strassenAlgorithm(dimension, matrixA, matrixB, flag);
+  end = clock(); 
 
-  printf("Are they the same tho?\n");
-  if(compareMatrices(strassenCleaned, traditionalCleaned, dimension) == 0)
-    printf("Yes they are \n");
+  cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
+
+  printf("CPU time used: %f\n", cpu_time_used);
+
+  // printf("Strassen Done Matrix: \n");
+  // printMatrix(strassenMatrix, dimension);
+  // printf("\n");
+
+  // int** traditionalMatrix = regularMult(dimension, matrixA, matrixB);
+  // printf("Traditional Done Matrix: \n");
+  // printMatrix(traditionalMatrix, dimension);
+  // printf("\n");
+
+  // int** strassenCleaned = cleanMatrix(strassenMatrix, dimension);
+  // printf("Cleaned Strassen Matrix: \n");
+  // printMatrix(strassenCleaned, dimension);
+  // printf("\n");
+
+  // int** traditionalCleaned = cleanMatrix(traditionalMatrix, dimension);
+  // printf("Cleaned Traditional  Matrix: \n");
+  // printMatrix(traditionalCleaned, dimension);
+  // printf("\n");
+
+  // printf("Are they the same tho?\n");
+  // if(compareMatrices(strassenCleaned, traditionalCleaned, dimension) == 0)
+  //   printf("Yes they are \n");
   
 
   freeMatrix(matrixA, dimension);
@@ -181,15 +187,14 @@ int** allocateQuadrant(int** matrix, int d, int quadrant){
 	return newQuadrant;
 }
  
-int** strassenAlgorithm(int dimension, int** matrixA, int** matrixB){
+int** strassenAlgorithm(int dimension, int** matrixA, int** matrixB, int n0){
     int d = dimension;
 
     int** matrixC = allocateMatrix(d);
     
     // Base Case: when matrix is 1x1 (scalar multiplication)
-    if (d == 1){
-      countess++; 
-      matrixC[0][0] = matrixA[0][0] * matrixB[0][0];
+    if (d <= n0){
+      matrixC = regularMult(dimension, matrixA, matrixB);
       return matrixC; 
 
     }
@@ -240,13 +245,13 @@ int** strassenAlgorithm(int dimension, int** matrixA, int** matrixB){
       y = allocateMatrix(newDim);
 
       // compute A11, B11, ... A22, B22 
-      P1 = strassenAlgorithm(newDim, sumMatrices(a00, a11, newDim), sumMatrices(b00, b11, newDim));
-      P2 = strassenAlgorithm(newDim, sumMatrices(a10, a11, newDim), b00);
-      P3 = strassenAlgorithm(newDim, a00, subMatrices(b01, b11, newDim));
-      P4 = strassenAlgorithm(newDim, a11, subMatrices(b10, b00, newDim));
-      P5 = strassenAlgorithm(newDim, sumMatrices(a00, a01, newDim), b11);
-      P6 = strassenAlgorithm(newDim, subMatrices(a10, a00, newDim), sumMatrices(b00, b01, newDim));
-      P7 = strassenAlgorithm(newDim, subMatrices(a01, a11, newDim), sumMatrices(b10, b11, newDim));
+      P1 = strassenAlgorithm(newDim, sumMatrices(a00, a11, newDim), sumMatrices(b00, b11, newDim), n0);
+      P2 = strassenAlgorithm(newDim, sumMatrices(a10, a11, newDim), b00, n0);
+      P3 = strassenAlgorithm(newDim, a00, subMatrices(b01, b11, newDim), n0);
+      P4 = strassenAlgorithm(newDim, a11, subMatrices(b10, b00, newDim), n0);
+      P5 = strassenAlgorithm(newDim, sumMatrices(a00, a01, newDim), b11, n0);
+      P6 = strassenAlgorithm(newDim, subMatrices(a10, a00, newDim), sumMatrices(b00, b01, newDim), n0);
+      P7 = strassenAlgorithm(newDim, subMatrices(a01, a11, newDim), sumMatrices(b10, b11, newDim), n0);
 
       // printMatrix(x0, newDim);
       c00 = sumMatrices(subMatrices(sumMatrices(P1, P4, newDim), P5, newDim), P7, newDim);

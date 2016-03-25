@@ -1,0 +1,63 @@
+\documentclass[]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage{listings}
+\setlength{\oddsidemargin}{-0.25 in}
+\setlength{\evensidemargin}{-0.25 in}
+\setlength{\topmargin}{-0.9 in}
+\setlength{\textwidth}{7.0 in}
+\setlength\parindent{24pt}
+\setlength{\textheight}{9.0 in}
+\setlength{\headsep}{0.75 in}
+\usepackage{indentfirst}
+\setlength{\parskip}{0.1 in}
+\newcommand{\nl}{\\ \\}
+
+\begin{document}
+\title{Programming Assignment 2}
+\author{Alexander Solis and Hana Kim}
+\date{March 25, 2015}
+\maketitle
+
+\section{Analytical Analysis}
+In this section, we explain how we determine the cross-over point between Strassen's algorithm and the traditional matrix multiplication method mathematically.  The cross-over point is the value of the dimension, $n_0$, at which Strassen's algorithm should stop running on the multiplication of two matrices of type $nxn$.  After $n_0$, the conventional multiplication should be utilized.  
+
+In order to determine the cross-over point $n_0$, one needs to find the point at which running Strassen's algorithm on $n_0$, and subsequently the conventional method on the remaining two matrices is exactly equal to to running the traditional matrix method on the two matrices of size $n_0$.  In order to do this, one needs to: 
+
+\begin{enumerate}
+\item Determine the closed-form equation for the number of operations that the conventional method takes 
+\item Determine the exact recurrence relation for the number of operations that Strassen's algorithm takes
+\item Compare these two equations and solve for the appropriate n, such that the two are equal
+\end{enumerate}
+
+\subsection{The Conventional Matrix Method}
+The conventional matrix method two matrices $A$ and $B$ and multiplies every row value of matrix A  by every column value of matrix B in order to derive their product, matrix C, which is of the same dimension as matrix A and B (assuming that the dimensions are equal and square).  In order to derive the cost for multiplying two matrices each of size $n $x$ n$, first note that there are $n^2$ values in each matrix.  Determine the cost of obtaining the value of a single value in the result matrix, $C[0][0]$.  In order to get this value, one utilizes the method learned in his linear algebra class, $C[1][1]$: $$C[1][1] = a[1][1]*b[1][1] + a[1][2]*b[2][1] + a[1][3]*b[3][1] + .... + a[1][n]*b[n][1]$$
+
+As one can see from this equation, getting this value takes $n$ multiplication operations and $n-1$ additions, for a grand total of $n+(n-1) = 2n -1$ operations.   Because there are necessarily $n^2$ values in the result matrix, matrix C, one needs to perform these $n+(n-1)$ $n^2$ times, which means that the total operation cost of multiplying two matrices via the conventional method is $n^2(2n-1) = 2n^3 - n^2$ operations for the conventional matrix multiplication method.  
+
+\subsection{Recurrence Equation for Strassen's Method}
+Next, one needs to find a proper recurrence relation to describe the operation cost of Strassen's method. 
+Let $m(n) =$ number of multiplications used to multiply two $nxn$ matrices using Strassen's method.  Strassen's method solves for seven intermediate values of $x$ after it divides a matrix into four parts.  These equations look like this: $$x_1 = (a_{11} +a_{22}) *(b_{11} + b_{22})$$ $$ x_2 = (a_{21} +a_{22}) * b_{11}$$ $$x_3 = a_{11}  * (b_{21} +b_{22}). $$ $$x_4 = a_{22} *(b_{21} - b_{11})$$ $$x_5 = (a_{11} +a_{12}) * b_{22}$$ $$x_6 = (a_{21} - a_{11}) * (b_{11} +b_{12}) $$ $$ x_7 = (a_{12} - a_{22}) * (b_{21} - b_{22})$$   
+
+As one can see from these seven calculations, each call of Strassen's requires seven multiplication operations.  
+
+Then, let $p(n) = $ the number of additions and subtractions required by Strassen's algorithm to multiply two matrices.  For each value in the product matrix, after the $x's$ described above are calculated, Strassen's solves for the four quadrants of the resultant matrix, $C$.  Two of these equations look like this: $$C_{21} = x_2 + x_4$$ $$C_{11} = x_1 + x_4 - x_5 + x_7$$.  $$C_{12} = x_3 + x_5$$ $$C_{22} = x_1 - x_2 + x_3 + x_6 $$
+
+When the number of addition and subtraction operations in the above equations is counted (including the seven x equations), one finds that there are 18 such operations.  Because this operation has to be done for each value of the resultant matrix, they need to be done $n^2$ times.  Thus, there are $18n^2$ such operations per Strassen's call.  
+
+In total, then, we can determine that the recurrence relation for Strassen's algorithm is $$T(n) = 7T(\lceil n/2 \rceil) + 18(\lceil n/2 \rceil )^2$$
+
+Note that the ceiling values are placed around $n$ because one is not assuming that n is even or odd.  In the case that n is odd, then, one will want to pad that matrix with an extra dimension, as Strassen's does not work with odd-dimensioned matrices.  When we do our comparisons, we will need to analyze two distinct cases, one in which n is odd and the other when n is even. 
+
+\subsection{Comparison}
+Now, we want to find the value of $n_0$ at which, upon multiplying two $n$ x $n$ matrices initially using Strassen's algorithm, one stops running Strassen's algorithm and switches to the conventional method.  That is, $n_0$ should be the value of that dimension where running the conventional method on $n_0$ runs at the same run time as running Strassen's on $n_0$, then the conventional method on any subsequent matrix multiplication calculations required by the recursion.  
+
+That is, we want to find $n_0$ such that: $$7((2\lceil n_0/2 \rceil)^3 -( \lceil n_0/2 \rceil)^2)) + 18(\lceil n_0/2 \rceil )^ 2 = 2n_0^3 - n_0^2  $$
+
+We look at two cases, since we want to analyze it when $n$ is either even or odd:
+
+\subsubsection{n is odd}
+$$7(2(\frac{n+1}{2})^3 - (\frac{n+1}{2})^2) + 18(\frac{n+1}{2})^2 = 2n^3 -n^2
+
+
+\end{document}
