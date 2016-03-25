@@ -15,13 +15,14 @@ int main(int argc, char **argv){
 
   int flag = strtoul(argv[1],NULL, 10);
   int dimension = strtoul(argv[2], NULL, 10);
-  int d = dimension; 
+  int d;
 
-  // printf("ARGV4: %s\n", argv[3]);
-
-  // printf("HERE %s", argv[2]);
-  // int matrixA[d][d];
-  // int matrixB[d][d];
+  if (dimension % 2 == 0){
+  	d = dimension;
+  }
+  else{
+  	d = dimension + 1;
+  }
 
   // allocate matrix A
   int** matrixA = (int**) malloc(sizeof(int*)*d);
@@ -35,6 +36,9 @@ int main(int argc, char **argv){
     matrixB[i] = (int*) malloc(sizeof(int)*d);
   }
 
+  printf("HEY\n");
+  printMatrix(matrixB, dimension);
+
   char* fileName = argv[3];
 
   readFile(fileName, dimension, matrixA, matrixB);
@@ -42,9 +46,9 @@ int main(int argc, char **argv){
   int** strassenMatrix = strassenAlgorithm(dimension, matrixA, matrixB);
   printMatrix(strassenMatrix, dimension);
 
-  freeMatrix(matrixA, d);
-  freeMatrix(matrixB, d);
-  freeMatrix(strassenMatrix, d);
+  freeMatrix(matrixA, dimension);
+  freeMatrix(matrixB, dimension);
+  freeMatrix(strassenMatrix, dimension);
 
   return 0;
 }
