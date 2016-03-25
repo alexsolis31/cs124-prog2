@@ -43,8 +43,12 @@ int main(int argc, char **argv){
 
   readFile(fileName, dimension, matrixA, matrixB);
 
+<<<<<<< HEAD
   int** strassenMatrix = strassenAlgorithm(dimension, matrixA, matrixB);
   printf("Strassen Done Matrix: \n");
+=======
+  int** strassenMatrix = strassenAlgorithm(d, matrixA, matrixB);
+>>>>>>> f376148bd0a64c7eda064b0aee1cec7c350cbcab
   printMatrix(strassenMatrix, dimension);
   printf("\n");
 
