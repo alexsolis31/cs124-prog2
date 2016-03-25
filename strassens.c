@@ -43,7 +43,7 @@ int main(int argc, char **argv){
 
   readFile(fileName, dimension, matrixA, matrixB);
 
-  int** strassenMatrix = strassenAlgorithm(dimension, matrixA, matrixB);
+  int** strassenMatrix = strassenAlgorithm(d, matrixA, matrixB);
   printMatrix(strassenMatrix, dimension);
 
   freeMatrix(matrixA, dimension);
